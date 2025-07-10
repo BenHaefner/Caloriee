@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct Food: Identifiable, Hashable {
+struct FoodItem: Identifiable, Hashable {
     var id = UUID()
     var calorieCost: Int
     var name: String
