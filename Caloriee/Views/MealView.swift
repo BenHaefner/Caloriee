@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+struct MealView: View {
     let meal: Meal = Meal(name: "Snack", foodItems: [
         FoodItem(calorieCost: 240, name: "Hot Chocolate", description: "A refreshing cup!"),
         FoodItem(calorieCost: 500, name: "Bee Bites", description: "I dont know but I like it...")
