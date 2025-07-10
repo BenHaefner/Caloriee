@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct Profile: Identifiable, Hashable {
+struct Profile: Identifiable {
     var id = UUID()
     var calorieGoal: Int
 

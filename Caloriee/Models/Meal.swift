@@ -6,10 +6,10 @@
 //
 import SwiftUI
 
-struct Meal: Identifiable, Hashable {
+struct Meal: Identifiable {
     var id = UUID()
     var name: String
-    var foodItems: [FoodItem]
+    @State var foodItems: [FoodItem]
     
     var calorieTotal: Int {
         // To get the current calorie total for a meal,
@@ -19,4 +19,8 @@ struct Meal: Identifiable, Hashable {
         foodItems.reduce(0) { $0 + $1.calorieCost }
     }
     
+    func deleteFoodItem(_ deletedItem: FoodItem) {
+        foodItems.removeAll(where: {$0.id == deletedItem.id})
+    }
+
 }

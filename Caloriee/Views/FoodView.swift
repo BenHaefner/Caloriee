@@ -7,16 +7,18 @@
 import SwiftUI
 
 struct FoodView: View {
-    let foodItem: FoodItem = FoodItem(calorieCost: 240, name: "Hot Chocolate", description: "A refreshing cup!")
+    let foodItem: FoodItem
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 5) {
                 Text(foodItem.name)
                     .fontWeight(.bold)
                 
-                Text(foodItem.description)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                if !foodItem.description.isEmpty {
+                    Text(foodItem.description)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
             
             Spacer()
@@ -25,8 +27,4 @@ struct FoodView: View {
         }
         .padding()
     }
-}
-
-#Preview {
-    FoodView()
 }

@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct Event: Identifiable, Hashable {
+struct Event: Identifiable {
     var id = UUID()
     var caloriesSpent: Int
     var date: Date

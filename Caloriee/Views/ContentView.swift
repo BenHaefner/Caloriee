@@ -9,11 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        FoodView()
-            .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    MealView()
 }
