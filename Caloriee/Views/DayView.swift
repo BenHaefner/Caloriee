@@ -9,16 +9,16 @@ import SwiftUI
 
 struct DayView: View {
     // Move to real data
-    @Binding var foodItems: [FoodItem]
+    @State var foodItems: [FoodItem]
     @State private var addingFood = false
     @State private var newFoodItem = FoodItem()
 
     var body: some View {
         List {
             ForEach(MealTypes.allCases) { mealType in
-                if foodItems.contains(where: { $0.mealType.id == mealType.id }) {
+                if foodItems.contains(where: { $0.mealType == mealType }) {
                     Section(content: {
-                        ForEach(foodItems) { foodItem in
+                        ForEach(foodItems.filter{ $0.mealType == mealType }) { foodItem in
                             NavigationLink {
                                 FoodEditView(foodItem: foodItem)
                             } label: {
@@ -51,9 +51,11 @@ struct DayView: View {
 }
 
 #Preview {
-    DayView(foodItems: .constant([
-        FoodItem(calorieCost: 240, name: "Hot Chocolate", description: "A refreshing cup!", mealType: MealTypes.breakfast),
-        FoodItem(calorieCost: 500, name: "Bee Bites", description: "I dont know but I like it...", mealType: MealTypes.dinner),
-        FoodItem(calorieCost: 200, name: "Rice", description: "Simple and clean", mealType: MealTypes.snacks)
-    ]))
+    NavigationView {
+        DayView(foodItems: [
+            FoodItem(calorieCost: 240, name: "Hot Chocolate", description: "A refreshing cup!", mealType: MealTypes.breakfast),
+            FoodItem(calorieCost: 500, name: "Bee Bites", description: "I dont know but I like it...", mealType: MealTypes.dinner),
+            FoodItem(calorieCost: 200, name: "Rice", description: "Simple and clean", mealType: MealTypes.snacks)
+        ])
+    }
 }
