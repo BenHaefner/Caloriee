@@ -10,5 +10,5 @@ struct Event: Identifiable {
     var id = UUID()
     var caloriesSpent: Int
     var date: Date
-    var meals: [Meal]
+    var foodItems: [FoodItem]
 }

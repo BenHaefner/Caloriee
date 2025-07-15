@@ -1,0 +1,19 @@
+//
+//  Meals.swift
+//  Caloriee
+//
+//  Created by Ben Haefner on 7/11/25.
+//
+import SwiftUI
+
+enum MealTypes: String, CaseIterable, Identifiable {
+    case breakfast = "Breakfast"
+    case lunch = "Lunch"
+    case dinner = "Dinner"
+    case snacks = "Snacks"
+    case other = "Other"
+    
+    var id: String { self.rawValue }
+    var name: String { self.rawValue }
+}
+

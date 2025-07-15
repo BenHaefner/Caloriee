@@ -7,12 +7,10 @@
 
 import SwiftUI
 
-struct FoodEditor: View {
+struct FoodEditView: View {
+    @Binding var foodItem: FoodItem
+
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
-}
-
-#Preview {
-    FoodEditor()
 }

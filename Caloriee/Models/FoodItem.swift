@@ -8,8 +8,9 @@ import SwiftUI
 
 struct FoodItem: Identifiable {
     var id = UUID()
-    var calorieCost: Int
-    var name: String
-    var description: String
+    var calorieCost: Int = 0
+    var name: String = ""
+    var description: String = ""
+    var mealType: MealTypes = .other // TODO: Make no longer "other" in the future when im more certain of the data model
 
 }
