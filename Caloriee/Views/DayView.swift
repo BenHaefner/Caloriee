@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DayView: View {
-    // Move to real data
+    // TODO: Move to real data
     @State var foodItems: [FoodItem]
     @State private var addingFood = false
     @State private var newFoodItem = FoodItem()
@@ -18,9 +18,9 @@ struct DayView: View {
             ForEach(MealTypes.allCases) { mealType in
                 if foodItems.contains(where: { $0.mealType == mealType }) {
                     Section(content: {
-                        ForEach(foodItems.filter{ $0.mealType == mealType }) { foodItem in
+                        ForEach($foodItems.filter{ $0.mealType.wrappedValue == mealType }) { $foodItem in
                             NavigationLink {
-                                FoodEditView(foodItem: foodItem)
+                                FoodDetailView(foodItem: $foodItem)
                             } label: {
                                 FoodView(foodItem: foodItem)
                             }
