@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FoodDetailView: View {
     @Binding var foodItem: FoodItem
-    let editing: Bool = false
+    @State var editing: Bool = false
     
 
     var body: some View {
@@ -34,7 +34,6 @@ struct FoodDetailView: View {
                     Spacer()
                     Text(foodItem.calorieCost.description)
                         .font(.title3)
-                        .fontWeight(.semibold)
                 }
                 HStack {
                     Text("Meal")
@@ -42,14 +41,22 @@ struct FoodDetailView: View {
                     Spacer()
                     Text(foodItem.mealType.name)
                         .font(.title3)
-                        .fontWeight(.semibold)
                 }
                 VStack(alignment: .leading) {
                     Text("Description")
                         .font(.headline)
                     Spacer()
                     Text(foodItem.description)
-                        .font(.default)
+                        .font(.title3)
+                }
+            }
+        }
+        .toolbar{
+            ToolbarItem {
+                Button {
+                    editing.toggle()
+                } label: {
+                    Text(editing ? "Done" : "Edit")
                 }
             }
         }
