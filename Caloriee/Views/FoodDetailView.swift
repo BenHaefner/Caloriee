@@ -19,43 +19,39 @@ struct FoodDetailView: View {
     
     var body: some View {
         List {
-            if editing {
+            EditableRow(editing: editing, label: "Name", viewModeValue: foodItem.name) {
                 TextField("Name", text: $editableFoodItem.name)
+                    .multilineTextAlignment(.trailing)
+            }
+            EditableRow(editing: editing, label: "Calories", viewModeValue: foodItem.calorieCost.description) {
                 TextField("Calorie Count", value: $editableFoodItem.calorieCost, formatter: NumberFormatter())
+                    .multilineTextAlignment(.trailing)
                     .keyboardType(.numberPad) // TODO: Should i add a text mask?
+            }
+            if (editing) {
                 Picker("Meal", selection: $editableFoodItem.mealType) {
                     ForEach(MealTypes.allCases) { mealType in
                         Text(mealType.name).tag(mealType)
                     }
                 }
-                TextField("Description", text: $editableFoodItem.description, axis: .vertical)
+                    .font(.headline)
             } else {
-                HStack {
-                    Text("Name")
-                        .font(.headline)
-                    Spacer()
-                    Text(foodItem.name)
-                }
-                HStack {
-                    Text("Calories")
-                        .font(.headline)
-                    Spacer()
-                    Text(foodItem.calorieCost.description)
-                        .font(.title3)
-                }
                 HStack {
                     Text("Meal")
                         .font(.headline)
                     Spacer()
                     Text(foodItem.mealType.name)
-                        .font(.title3)
                 }
-                VStack(alignment: .leading) {
-                    Text("Description")
-                        .font(.headline)
-                    Spacer()
+            }
+            VStack(alignment: .leading) {
+                Text("Description")
+                    .font(.headline)
+                Spacer()
+                if (editing) {
+                    TextField("Description", text: $editableFoodItem.description, axis: .vertical)
+                } else {
                     Text(foodItem.description)
-                        .font(.title3)
+
                 }
             }
         }
@@ -68,6 +64,26 @@ struct FoodDetailView: View {
                     editing.toggle()
                 } label: {
                     Text(editing ? "Done" : "Edit")
+                }
+            }
+        }
+    }
+    
+    struct EditableRow<Content: View>: View {
+        var editing: Bool
+        let label: String
+        let viewModeValue: String
+        let editableContent: () -> Content
+
+        var body: some View {
+            HStack {
+                Text(label)
+                    .font(.headline)
+                Spacer()
+                if (!editing) {
+                    Text(viewModeValue)
+                } else {
+                    editableContent()
                 }
             }
         }
