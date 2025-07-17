@@ -10,17 +10,25 @@ import SwiftUI
 struct FoodDetailView: View {
     @Binding var foodItem: FoodItem
     @State var editing: Bool = false
-    
+    @State var editableFoodItem: FoodItem
 
+    init(foodItem: Binding<FoodItem>) {
+        editableFoodItem = foodItem.wrappedValue
+        self._foodItem = foodItem
+    }
+    
     var body: some View {
         List {
             if editing {
-                TextField("Name", text: $foodItem.name)
-                    .font(.title2)
-                TextField("Calorie Count", value: $foodItem.calorieCost, formatter: NumberFormatter())
-                    .keyboardType(.numberPad)
-                TextEditor(text: $foodItem.description)
-                    
+                TextField("Name", text: $editableFoodItem.name)
+                TextField("Calorie Count", value: $editableFoodItem.calorieCost, formatter: NumberFormatter())
+                    .keyboardType(.numberPad) // TODO: Should i adda a text mask?
+                Picker("Meal", selection: $editableFoodItem.mealType) {
+                    ForEach(MealTypes.allCases) { mealType in
+                        Text(mealType.name).tag(mealType)
+                    }
+                }
+                TextField("Description", text: $editableFoodItem.description, axis: .vertical)
             } else {
                 HStack {
                     Text("Name")
@@ -54,6 +62,9 @@ struct FoodDetailView: View {
         .toolbar{
             ToolbarItem {
                 Button {
+                    if (editing) {
+                        foodItem = editableFoodItem
+                    }
                     editing.toggle()
                 } label: {
                     Text(editing ? "Done" : "Edit")
@@ -61,8 +72,4 @@ struct FoodDetailView: View {
             }
         }
     }
-}
-
-#Preview {
-    FoodDetailView(foodItem: .constant(FoodItem(calorieCost: 1234, name: "Sample Food", description: "This is a sample description.")))
 }
