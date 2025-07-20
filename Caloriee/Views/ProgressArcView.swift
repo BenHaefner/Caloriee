@@ -15,36 +15,41 @@ struct ProgressArcView: View {
     }
     // TODO: Make dynamic for screen size
     var body: some View {
-        let startTrim = 210.0/360.0
-        let endTrim = 330.0/360.0
-        ZStack(alignment: .center) {
+        let startTrim = 210.0
+        let endTrim = 330.0
             VStack {
+                GlassEffectContainer {
+                    ZStack {
+                        Circle()
+                            .fill(Color.clear)
+                            .glassEffect(.regular.tint(.teal.opacity(0.2)), in:Arc(startTrim: startTrim, endTrim: endTrim, lineThickness: 8.0))
+                        Circle()
+                            .fill(Color.clear)
+                            .glassEffect(.regular.tint(.green), in:Arc(startTrim: startTrim, endTrim: (startTrim + (endTrim - startTrim) * calorieProgress), lineThickness: 6.0))
+                    }
+                    .offset(y:100)
+                }
                 Text("\(caloriesConsumed.description) cal")
-                Text("\(Int(calorieProgress*100).description)% of your goal")
+                Text("\(Int(calorieProgress * 100).description)% of your goal")
             }
             .padding()
-            Circle()
-                .trim(from: startTrim, to: endTrim)
-                .stroke(style: .init(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                .foregroundColor(.gray)
-                .shadow(radius: 1)
-                .frame(width: 300, height: 300)
-                .offset(y: 100)
-            Circle()
-                // These represent the desired angles (210 -> 330)
-                .trim(from: startTrim, to: startTrim + (endTrim - startTrim)*calorieProgress)
-                .stroke(style: .init(lineWidth: 8, lineCap: .round, lineJoin: .round))
-                .foregroundColor(calorieProgress == 1 ? .yellow : .green)
-                .shadow(radius: 3)
-                .frame(width: 300, height: 300)
-                .offset(y: 100)
-        }
-            .frame(width: 300, height: 150)
-            .clipped()
+            .frame(height: 125)
+    }
+}
 
+struct Arc : Shape {
+    @State var startTrim: CGFloat
+    @State var endTrim: CGFloat
+    @State var lineThickness: CGFloat
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        p.addArc(center: CGPoint(x: rect.midX, y:rect.midY), radius: (rect.width*3) - lineThickness, startAngle: .degrees(startTrim), endAngle: .degrees(endTrim), clockwise: false)
+        p.addArc(center: CGPoint(x: rect.midX, y:rect.midY), radius: (rect.width*3) + lineThickness, startAngle: .degrees(endTrim), endAngle: .degrees(startTrim), clockwise: true)
+        return p
+        
     }
 }
 
 #Preview {
-    ProgressArcView(caloriesConsumed: 2100, calorieGoal: 2200)
+    ProgressArcView(caloriesConsumed: 1400, calorieGoal: 2200)
 }
