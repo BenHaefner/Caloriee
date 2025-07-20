@@ -6,10 +6,17 @@
 //
 import SwiftUI
 
-struct Event: Identifiable {
+struct Day: Identifiable {
     var id = UUID()
-    var caloriesSpent: Int
     var date: Date
     var foodItems: [FoodItem]
-    // TODO: Function to calculate progress toward calorie goal here by adding calories of all food items
+    
+    var caloriesConsumed: Int {
+        self.foodItems.reduce(0) {$0 + $1.calorieCost}
+    }
+    
+    mutating func deleteFoodItem(_ deletedItem: FoodItem) {
+        foodItems.removeAll(where: {$0.id == deletedItem.id})
+    }
 }
+
