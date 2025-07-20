@@ -14,6 +14,7 @@ struct DayView: View {
     @State private var newFoodItem = FoodItem()
 
     var body: some View {
+        // TODO: Implement ProgressArcView here above list
         List {
             ForEach(MealTypes.allCases) { mealType in
                 if foodItems.contains(where: { $0.mealType == mealType }) {

@@ -11,4 +11,5 @@ struct Event: Identifiable {
     var caloriesSpent: Int
     var date: Date
     var foodItems: [FoodItem]
+    // TODO: Function to calculate progress toward calorie goal here by adding calories of all food items
 }
