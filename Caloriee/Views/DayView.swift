@@ -17,13 +17,15 @@ struct DayView: View {
     var body: some View {
         List{
             Section(content: {
-                Text(day.date.formatted(date: .complete, time: .omitted))
-                    .font(.title)
-                    .fontWeight(.bold)
                 VStack(alignment: .leading) {
                     ProgressArcView(caloriesConsumed: day.caloriesConsumed, calorieGoal: user.calorieGoal)
                         .frame(maxWidth:.infinity)
                 }
+            }, header: {
+                Text(day.date.formatted(date: .complete, time: .omitted))
+                    .font(.title)
+                    .foregroundColor(.primary)
+                    .fontWeight(.bold)
             })
             ForEach(MealTypes.allCases) { mealType in
                 if day.foodItems.contains(where: { $0.mealType == mealType }) {
