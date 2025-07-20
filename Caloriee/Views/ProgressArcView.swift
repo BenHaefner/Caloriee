@@ -15,17 +15,18 @@ struct ProgressArcView: View {
     }
     // TODO: Make dynamic for screen size
     var body: some View {
-        let startTrim = 210.0
-        let endTrim = 330.0
+        let start = 210.0
+        let end = 330.0
             VStack {
                 GlassEffectContainer {
                     ZStack {
                         Circle()
                             .fill(Color.clear)
-                            .glassEffect(.regular.tint(.teal.opacity(0.2)), in:Arc(startTrim: startTrim, endTrim: endTrim, lineThickness: 8.0))
+                            .glassEffect(.regular.tint(.teal.opacity(0.2)), in:Arc(start: start, end: end, lineThickness: 8.0))
                         Circle()
                             .fill(Color.clear)
-                            .glassEffect(.regular.tint(.green), in:Arc(startTrim: startTrim, endTrim: (startTrim + (endTrim - startTrim) * calorieProgress), lineThickness: 6.0))
+                            .glassEffect(.regular.tint(calorieProgress < 0.80 ? .green : .yellow),
+                               in:Arc(start: start, end: (start + (end - start) * calorieProgress), lineThickness: 6.0))
                     }
                     .offset(y:100)
                 }
@@ -38,18 +39,18 @@ struct ProgressArcView: View {
 }
 
 struct Arc : Shape {
-    @State var startTrim: CGFloat
-    @State var endTrim: CGFloat
+    @State var start: CGFloat
+    @State var end: CGFloat
     @State var lineThickness: CGFloat
     func path(in rect: CGRect) -> Path {
         var p = Path()
-        p.addArc(center: CGPoint(x: rect.midX, y:rect.midY), radius: (rect.width*3) - lineThickness, startAngle: .degrees(startTrim), endAngle: .degrees(endTrim), clockwise: false)
-        p.addArc(center: CGPoint(x: rect.midX, y:rect.midY), radius: (rect.width*3) + lineThickness, startAngle: .degrees(endTrim), endAngle: .degrees(startTrim), clockwise: true)
+        p.addArc(center: CGPoint(x: rect.midX, y:rect.midY), radius: (rect.width*3) - lineThickness, startAngle: .degrees(start), endAngle: .degrees(end), clockwise: false)
+        p.addArc(center: CGPoint(x: rect.midX, y:rect.midY), radius: (rect.width*3) + lineThickness, startAngle: .degrees(end), endAngle: .degrees(start), clockwise: true)
         return p
         
     }
 }
 
 #Preview {
-    ProgressArcView(caloriesConsumed: 1400, calorieGoal: 2200)
+    ProgressArcView(caloriesConsumed:  1700, calorieGoal: 2200)
 }
