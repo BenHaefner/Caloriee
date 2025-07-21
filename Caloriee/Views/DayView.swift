@@ -55,39 +55,35 @@ struct DayView: View {
             }
         }
         .toolbar{
-            ToolbarItem(id: "anyDate", placement: .cancellationAction) {
+            ToolbarItemGroup(placement: .bottomBar, content: {
+                Button {
+                    print("previous")
+                } label: {
+                    Image(systemName: "arrowshape.backward")
+                }
+                Button() {
+                    print("add")
+                } label: {
+                    Image(systemName: "plus.app")
+                }
+                Button {
+                    print("next")
+                } label: {
+                    Image(systemName: "arrowshape.forward")
+                }
+            })
+            ToolbarItem(id: "anyDate", placement: .navigation) {
                 Button {
                     print("any date")
                 } label: {
                     Image(systemName: "calendar")
                 }
             }
-            ToolbarItem(id: "userEdit", placement: .primaryAction) {
+            ToolbarItem(id: "userEdit", placement: .topBarTrailing) {
                 Button {
                     print("edit user")
                 } label: {
                     Image(systemName: "person")
-                }
-            }
-            ToolbarItem(id: "previousDate", placement: .bottomBar) {
-                Button {
-                    print("previous")
-                } label: {
-                    Image(systemName: "arrowshape.backward")
-                }
-            }
-            ToolbarItem(id: "addButton", placement: .bottomBar) {
-                Button {
-                    print("add")
-                } label: {
-                    Image(systemName: "plus.app")
-                }
-            }
-            ToolbarItem(id: "nextDate", placement: .bottomBar) {
-                Button {
-                    print("next")
-                } label: {
-                    Image(systemName: "arrowshape.forward")
                 }
             }
         }
