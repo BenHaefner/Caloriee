@@ -83,10 +83,6 @@ struct DayView: View {
                 }
 
             })
-            ToolbarItem(id: "anyDate", placement: .navigation) {
-            }
-            ToolbarItem(id: "userEdit", placement: .topBarTrailing) {
-            }
         }
     }
 }
