@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FoodDetailView: View {
+    @Environment(\.dismiss) var dismiss
     @Binding var foodItem: FoodItem
     @State var editing: Bool = false
     @State var editableFoodItem: FoodItem
@@ -21,11 +22,9 @@ struct FoodDetailView: View {
         List {
             EditableRow(editing: editing, label: "Name", viewModeValue: foodItem.name) {
                 TextField("Name", text: $editableFoodItem.name)
-                    .multilineTextAlignment(.trailing)
             }
             EditableRow(editing: editing, label: "Calories", viewModeValue: foodItem.calorieCost.description) {
                 TextField("Calorie Count", value: $editableFoodItem.calorieCost, formatter: NumberFormatter())
-                    .multilineTextAlignment(.trailing)
                     .keyboardType(.numberPad) // TODO: Should i add a text mask?
             }
             if (editing) {
@@ -34,12 +33,12 @@ struct FoodDetailView: View {
                         Text(mealType.name).tag(mealType)
                     }
                 }
+                .pickerStyle(.inline)
                     .font(.headline)
             } else {
-                HStack {
+                VStack(alignment: .leading) {
                     Text("Meal")
                         .font(.headline)
-                    Spacer()
                     Text(foodItem.mealType.name)
                 }
             }
@@ -56,10 +55,19 @@ struct FoodDetailView: View {
             }
         }
         .toolbar{
-            ToolbarItem {
+            ToolbarItemGroup(placement: .primaryAction) {
+                if(editing) {
+                    Button {
+                        // TODO: Generate suggested calories
+                        print("generate")
+                    } label: {
+                        Image(systemName: "apple.intelligence")
+                    }
+                }
                 Button {
                     if (editing) {
                         foodItem = editableFoodItem
+                        dismiss()
                     }
                     editing.toggle()
                 } label: {
@@ -76,10 +84,9 @@ struct FoodDetailView: View {
         let editableContent: () -> Content
 
         var body: some View {
-            HStack {
+            VStack (alignment: .leading) {
                 Text(label)
                     .font(.headline)
-                Spacer()
                 if (!editing) {
                     Text(viewModeValue)
                 } else {

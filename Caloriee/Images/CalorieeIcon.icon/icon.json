@@ -1,11 +1,27 @@
 {
   "fill" : {
-    "automatic-gradient" : "display-p3:0.89314,0.96783,0.67339,1.00000"
+    "linear-gradient" : [
+      "display-p3:0.26667,0.27843,0.35294,1.00000",
+      "display-p3:0.38431,0.44706,0.64314,1.00000"
+    ]
   },
   "groups" : [
     {
       "layers" : [
         {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:1.00000,0.72157,0.42353,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,0.72157,0.42353,1.00000"
+              }
+            }
+          ],
           "image-name" : "Caloriee.png",
           "name" : "Caloriee"
         }

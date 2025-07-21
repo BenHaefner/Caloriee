@@ -69,7 +69,7 @@ struct DayView: View {
                 Button() {
                     print("add")
                 } label: {
-                    Image(systemName: "plus.app")
+                    Image(systemName: "plus.square")
                 }
                 Button {
                     print("any date")
@@ -81,7 +81,6 @@ struct DayView: View {
                 } label: {
                     Image(systemName: "person")
                 }
-
             })
         }
     }
