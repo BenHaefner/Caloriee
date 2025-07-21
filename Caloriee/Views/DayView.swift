@@ -22,10 +22,10 @@ struct DayView: View {
                         .frame(maxWidth:.infinity)
                 }
             }, header: {
-                Text(day.date.formatted(date: .complete, time: .omitted))
-                    .font(.title)
+                Text(day.date.formatted(date: .abbreviated, time: .omitted))
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
                     .foregroundColor(.primary)
-                    .fontWeight(.bold)
             })
             ForEach(MealTypes.allCases) { mealType in
                 if day.foodItems.contains(where: { $0.mealType == mealType }) {
@@ -51,6 +51,43 @@ struct DayView: View {
                             .foregroundColor(.secondary)
                             .fontWeight(.bold)
                     })
+                }
+            }
+        }
+        .toolbar{
+            ToolbarItem(id: "anyDate", placement: .cancellationAction) {
+                Button {
+                    print("any date")
+                } label: {
+                    Image(systemName: "calendar")
+                }
+            }
+            ToolbarItem(id: "userEdit", placement: .primaryAction) {
+                Button {
+                    print("edit user")
+                } label: {
+                    Image(systemName: "person")
+                }
+            }
+            ToolbarItem(id: "previousDate", placement: .bottomBar) {
+                Button {
+                    print("previous")
+                } label: {
+                    Image(systemName: "arrowshape.backward")
+                }
+            }
+            ToolbarItem(id: "addButton", placement: .bottomBar) {
+                Button {
+                    print("add")
+                } label: {
+                    Image(systemName: "plus.app")
+                }
+            }
+            ToolbarItem(id: "nextDate", placement: .bottomBar) {
+                Button {
+                    print("next")
+                } label: {
+                    Image(systemName: "arrowshape.forward")
                 }
             }
         }

@@ -28,16 +28,18 @@ struct ProgressArcView: View {
                             .glassEffect(.regular.tint(calorieProgress < 0.80 ? .green : .yellow),
                                in:Arc(start: start, end: (start + (end - start) * calorieProgress), lineThickness: 6.0))
                     }
-                    .offset(y:100)
+                    .offset(y:120)
                 }
-                Text("\(caloriesConsumed.description) cal")
-                Text("\(Int(calorieProgress * 100).description)% of your goal")
+                Text("\((calorieGoal - caloriesConsumed).description)")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                Text("Calories Remaining")
             }
             .padding()
-            .frame(height: 125)
+            .frame(height: 150)
     }
 }
 
 #Preview {
-    ProgressArcView(caloriesConsumed:  1700, calorieGoal: 2200)
+    ProgressArcView(caloriesConsumed:  2500, calorieGoal: 2200)
 }
