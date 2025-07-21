@@ -63,7 +63,7 @@ struct FoodDetailView: View {
                     }
                     editing.toggle()
                 } label: {
-                    Text(editing ? "Done" : "Edit")
+                    Image(systemName: "square.and.pencil")
                 }
             }
         }

@@ -59,7 +59,12 @@ struct DayView: View {
                 Button {
                     print("previous")
                 } label: {
-                    Image(systemName: "arrowshape.backward")
+                    Image(systemName: "chevron.backward")
+                }
+                Button {
+                    print("next")
+                } label: {
+                    Image(systemName: "chevron.forward")
                 }
                 Button() {
                     print("add")
@@ -67,24 +72,20 @@ struct DayView: View {
                     Image(systemName: "plus.app")
                 }
                 Button {
-                    print("next")
-                } label: {
-                    Image(systemName: "arrowshape.forward")
-                }
-            })
-            ToolbarItem(id: "anyDate", placement: .navigation) {
-                Button {
                     print("any date")
                 } label: {
                     Image(systemName: "calendar")
                 }
-            }
-            ToolbarItem(id: "userEdit", placement: .topBarTrailing) {
                 Button {
                     print("edit user")
                 } label: {
                     Image(systemName: "person")
                 }
+
+            })
+            ToolbarItem(id: "anyDate", placement: .navigation) {
+            }
+            ToolbarItem(id: "userEdit", placement: .topBarTrailing) {
             }
         }
     }

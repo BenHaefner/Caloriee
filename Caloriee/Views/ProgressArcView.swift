@@ -22,7 +22,7 @@ struct ProgressArcView: View {
                     ZStack {
                         Circle()
                             .fill(Color.clear)
-                            .glassEffect(.regular.tint(.teal.opacity(0.2)), in:Arc(start: start, end: end, lineThickness: 8.0))
+                            .glassEffect(.regular.tint(.gray.opacity(0.2)), in:Arc(start: start, end: end, lineThickness: 8.0))
                         Circle()
                             .fill(Color.clear)
                             .glassEffect(.regular.tint(calorieProgress < 0.80 ? .green : .yellow),
