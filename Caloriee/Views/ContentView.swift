@@ -12,10 +12,14 @@ struct ContentView: View {
     @Environment(\.modelContext) private var context
     @State var user: Profile?
     @State var day: Day?
-
+    
     var body: some View {
         if (user != nil || day != nil) {
-            DayView(user: user!, day: day!)
+            DayView(user: user!, day: day!, onChangeDate: { date in
+                Task {
+                    await reinitDate(for: date)
+                }
+            })
         } else {
             ProgressView()
                 .task {
@@ -52,6 +56,25 @@ struct ContentView: View {
             }
         } catch {
             fatalError("Error retrieving initial data: \(error)")
+        }
+    }
+    
+    private func reinitDate(for date: Date) async {
+        do {
+            let days = try context.fetch(FetchDescriptor<Day>(
+                predicate: #Predicate {$0.date == date}
+            ))
+            let day = days.first
+            if (day != nil) {
+                self.day = day!
+            } else {
+                // TODO: Have the user set a goal when they first access the app
+                self.day = Day(date: date, foodItems: [])
+                context.insert(self.day!)
+                try context.save()
+            }
+        } catch {
+            fatalError("Error retrieving new date: \(error)")
         }
     }
 }

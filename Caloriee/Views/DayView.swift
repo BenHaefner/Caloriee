@@ -15,6 +15,9 @@ struct DayView: View {
     @Bindable var day: Day
     @State private var addingFood = false
     @State private var newFoodItem = FoodItem()
+    @State private var selectingDate = false
+    @State private var newAnyDate = Date()
+    var onChangeDate: (Date) -> Void
 
     var body: some View {
         List{
@@ -59,12 +62,14 @@ struct DayView: View {
         .toolbar{
             ToolbarItemGroup(placement: .bottomBar, content: {
                 Button {
-                    print("previous")
+                    let newDate = Calendar.current.date(byAdding: .day, value: -1, to: day.date)
+                    onChangeDate(newDate!)
                 } label: {
                     Image(systemName: "chevron.backward")
                 }
                 Button {
-                    print("next")
+                    let newDate = Calendar.current.date(byAdding: .day, value: 1, to: day.date)
+                    onChangeDate(newDate!)
                 } label: {
                     Image(systemName: "chevron.forward")
                 }
@@ -73,24 +78,32 @@ struct DayView: View {
                 } label: {
                     Image(systemName: "plus.square")
                 }
+                    .sheet(isPresented: $addingFood, onDismiss: {
+                        newFoodItem = FoodItem();
+                    }) {
+                        NavigationView {
+                            FoodDetailView(foodItem: $newFoodItem, creating: true, day: day)
+                        }
+                    }
                 Button {
-                    print("any date")
+                    selectingDate = true
                 } label: {
                     Image(systemName: "calendar")
                 }
+                    .sheet(isPresented: $selectingDate, onDismiss: {
+                        print(newAnyDate.description)
+                        onChangeDate(newAnyDate)
+                    }) {
+                        NavigationView {
+                            DateSelectorView(date: $newAnyDate)
+                        }
+                    }
                 Button {
                     print("edit user")
                 } label: {
                     Image(systemName: "person")
                 }
-                .sheet(isPresented: $addingFood) {
-                    NavigationView {
-                        FoodDetailView(foodItem: $newFoodItem, creating: true, day: day)
-                            .onAppear {
-                                newFoodItem = FoodItem()
-                            }
-                    }
-                }
+                
             })
         }
     }
@@ -107,7 +120,9 @@ struct DayView: View {
                     FoodItem(calorieCost: 500, name: "Bee Bites", comment: "I dont know but I like it...", mealType: MealTypes.dinner),
                     FoodItem(calorieCost: 200, name: "Rice", comment: "Simple and clean is the way that you're making me feel tonight. It's hard to let it go. When you walk away, you dont hear me say \"please baby dont go.\"", mealType: MealTypes.snacks)
                 ]
-            )
+            ), onChangeDate: { date in
+                print(date.description)
+            }
         )
     }
 }

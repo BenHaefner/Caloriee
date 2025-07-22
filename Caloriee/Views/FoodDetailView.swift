@@ -12,12 +12,12 @@ struct FoodDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var foodItem: FoodItem
     @State var editing: Bool
-    @State var editableFoodItem: FoodItem
+    @State var editableFoodItem: EditableFoodItem
     @Bindable var day: Day
     var creating: Bool
 
     init(foodItem: Binding<FoodItem>, creating: Bool, day: Day) {
-        editableFoodItem = foodItem.wrappedValue
+        editableFoodItem = EditableFoodItem(foodItem: foodItem.wrappedValue)
         self._foodItem = foodItem
         self.creating = creating
         self.editing = creating
@@ -48,6 +48,7 @@ struct FoodDetailView: View {
                     Text(foodItem.mealType.name)
                 }
             }
+            
             VStack(alignment: .leading) {
                 Text("Description")
                     .font(.headline)
@@ -71,11 +72,11 @@ struct FoodDetailView: View {
                     }
                 }
                 Button {
-                    if (editing && !creating) {
-                        foodItem = editableFoodItem
-                        dismiss()
-                    } else if (creating) {
-                        day.addFoodItem(editableFoodItem)
+                    if (editing) {
+                        editableFoodItem.copy(to: foodItem)
+                        if (creating) {
+                            day.addFoodItem(foodItem)
+                        }
                         dismiss()
                     }
                     
