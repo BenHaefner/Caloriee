@@ -11,8 +11,8 @@ import SwiftData
 struct DayView: View {
     // TODO: Move to real data
     @Environment(\.modelContext) private var context
-    @State var user: Profile
-    @State var day: Day
+    @Bindable var user: Profile
+    @Bindable var day: Day
     @State private var addingFood = false
     @State private var newFoodItem = FoodItem()
 
@@ -86,6 +86,9 @@ struct DayView: View {
                 .sheet(isPresented: $addingFood) {
                     NavigationView {
                         FoodDetailView(foodItem: $newFoodItem, creating: true, day: day)
+                            .onAppear {
+                                newFoodItem = FoodItem()
+                            }
                     }
                 }
             })

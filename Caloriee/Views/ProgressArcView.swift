@@ -7,12 +7,12 @@
 import SwiftUI
 
 struct ProgressArcView: View {
-    @State var caloriesConsumed: Int
-    @State var calorieGoal: Int
-    
+    var caloriesConsumed: Int
+    var calorieGoal: Int
     var calorieProgress: CGFloat {
         min(CGFloat(caloriesConsumed) / CGFloat(calorieGoal), 1)
     }
+
     // TODO: Make dynamic for screen size
     var body: some View {
         let start = 210.0
@@ -22,7 +22,7 @@ struct ProgressArcView: View {
                     ZStack {
                         Circle()
                             .fill(Color.clear)
-                            .glassEffect(.regular.tint(.gray.opacity(0.2)), in:Arc(start: start, end: end, lineThickness: 8.0))
+                            .glassEffect(.regular.tint(.teal.opacity(0.2)), in:Arc(start: start, end: end, lineThickness: 8.0))
                         Circle()
                             .fill(Color.clear)
                             .glassEffect(.regular.tint(calorieProgress < 0.80 ? .green : .yellow),

@@ -13,7 +13,7 @@ struct FoodDetailView: View {
     @Binding var foodItem: FoodItem
     @State var editing: Bool
     @State var editableFoodItem: FoodItem
-    @State var day: Day
+    @Bindable var day: Day
     var creating: Bool
 
     init(foodItem: Binding<FoodItem>, creating: Bool, day: Day) {
@@ -75,7 +75,7 @@ struct FoodDetailView: View {
                         foodItem = editableFoodItem
                         dismiss()
                     } else if (creating) {
-                        day.foodItems.append(editableFoodItem)
+                        day.addFoodItem(editableFoodItem)
                         dismiss()
                     }
                     

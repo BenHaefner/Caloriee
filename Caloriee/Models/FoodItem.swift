@@ -10,7 +10,7 @@ import SwiftData
 @Model()
 final class FoodItem: Identifiable {
     var id = UUID()
-    var calorieCost: Int
+    var calorieCost: Int // TODO: This should have some kind of default value
     var name: String
     var comment: String
     var mealType: MealTypes

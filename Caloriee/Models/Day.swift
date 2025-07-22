@@ -25,5 +25,10 @@ final class Day: Identifiable {
     func deleteFoodItem(_ deletedItem: FoodItem) {
         foodItems.removeAll(where: {$0.id == deletedItem.id})
     }
+    
+    func addFoodItem(_ newFoodItem: FoodItem) {
+        foodItems.append(newFoodItem)
+    }
+
 }
 
