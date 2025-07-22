@@ -5,12 +5,20 @@
 //  Created by Ben Haefner on 7/9/25.
 //
 import SwiftUI
+import SwiftData
 
-struct FoodItem: Identifiable {
+@Model()
+final class FoodItem: Identifiable {
     var id = UUID()
-    var calorieCost: Int = 0
-    var name: String = ""
-    var description: String = ""
-    var mealType: MealTypes = .other // TODO: Make no longer "other" in the future when im more certain of the data model
-
+    var calorieCost: Int
+    var name: String
+    var comment: String
+    var mealType: MealTypes
+    
+    init(calorieCost: Int = 0, name: String = "", comment: String = "", mealType: MealTypes = MealTypes.other) {
+        self.calorieCost = calorieCost
+        self.name = name
+        self.comment = comment
+        self.mealType = mealType
+    }
 }

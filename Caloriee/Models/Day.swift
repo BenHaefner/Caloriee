@@ -5,8 +5,10 @@
 //  Created by Ben Haefner on 7/9/25.
 //
 import SwiftUI
+import SwiftData
 
-struct Day: Identifiable {
+@Model()
+final class Day: Identifiable {
     var id = UUID()
     var date: Date
     var foodItems: [FoodItem]
@@ -15,7 +17,12 @@ struct Day: Identifiable {
         self.foodItems.reduce(0) {$0 + $1.calorieCost}
     }
     
-    mutating func deleteFoodItem(_ deletedItem: FoodItem) {
+    init(date: Date, foodItems: [FoodItem] = []) {
+        self.date = date
+        self.foodItems = foodItems
+    }
+    
+    func deleteFoodItem(_ deletedItem: FoodItem) {
         foodItems.removeAll(where: {$0.id == deletedItem.id})
     }
 }

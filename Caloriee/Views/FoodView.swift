@@ -14,8 +14,8 @@ struct FoodView: View {
                 Text(foodItem.name)
                     .fontWeight(.bold)
                 
-                if !foodItem.description.isEmpty {
-                    Text(foodItem.description)
+                if !foodItem.comment.isEmpty {
+                    Text(foodItem.comment)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }

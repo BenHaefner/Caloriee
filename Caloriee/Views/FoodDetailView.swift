@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct FoodDetailView: View {
+    @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
     @Binding var foodItem: FoodItem
-    @State var editing: Bool = false
+    @State var editing: Bool
     @State var editableFoodItem: FoodItem
+    @State var day: Day
+    var creating: Bool
 
-    init(foodItem: Binding<FoodItem>) {
+    init(foodItem: Binding<FoodItem>, creating: Bool, day: Day) {
         editableFoodItem = foodItem.wrappedValue
         self._foodItem = foodItem
+        self.creating = creating
+        self.editing = creating
+        self.day = day
     }
     
     var body: some View {
@@ -47,9 +53,9 @@ struct FoodDetailView: View {
                     .font(.headline)
                 Spacer()
                 if (editing) {
-                    TextField("Description", text: $editableFoodItem.description, axis: .vertical)
+                    TextField("Description", text: $editableFoodItem.comment, axis: .vertical)
                 } else {
-                    Text(foodItem.description)
+                    Text(foodItem.comment)
 
                 }
             }
@@ -65,13 +71,40 @@ struct FoodDetailView: View {
                     }
                 }
                 Button {
-                    if (editing) {
+                    if (editing && !creating) {
                         foodItem = editableFoodItem
                         dismiss()
+                    } else if (creating) {
+                        day.foodItems.append(editableFoodItem)
+                        dismiss()
                     }
-                    editing.toggle()
+                    
+                    if (!creating) {
+                        editing.toggle()
+                    }
                 } label: {
                     Image(systemName: editing ? "checkmark" : "square.and.pencil")
+                }
+            }
+            ToolbarItem(placement: .cancellationAction) {
+                if (creating) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "multiply")
+                    }
+                }
+            }
+            ToolbarItem(placement:.title) {
+                if (creating) {
+                    Text("Add")
+                        .font(.title2)
+                } else if (editing) {
+                    Text("Edit")
+                        .font(.title2)
+                } else {
+                    Text("Detail")
+                        .font(.title2)
                 }
             }
         }

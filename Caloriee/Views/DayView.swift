@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DayView: View {
     // TODO: Move to real data
+    @Environment(\.modelContext) private var context
     @State var user: Profile
     @State var day: Day
     @State private var addingFood = false
@@ -32,7 +34,7 @@ struct DayView: View {
                     Section(content: {
                         ForEach($day.foodItems.filter{ $0.mealType.wrappedValue == mealType }) { $foodItem in
                             NavigationLink {
-                                FoodDetailView(foodItem: $foodItem)
+                                FoodDetailView(foodItem: $foodItem, creating: false, day: day)
                             } label: {
                                 FoodView(foodItem: foodItem)
                             }
@@ -67,7 +69,7 @@ struct DayView: View {
                     Image(systemName: "chevron.forward")
                 }
                 Button() {
-                    print("add")
+                    addingFood = true;
                 } label: {
                     Image(systemName: "plus.square")
                 }
@@ -81,6 +83,11 @@ struct DayView: View {
                 } label: {
                     Image(systemName: "person")
                 }
+                .sheet(isPresented: $addingFood) {
+                    NavigationView {
+                        FoodDetailView(foodItem: $newFoodItem, creating: true, day: day)
+                    }
+                }
             })
         }
     }
@@ -93,9 +100,9 @@ struct DayView: View {
             day: Day(
                 date: Date.now,
                 foodItems: [
-                    FoodItem(calorieCost: 240, name: "Hot Chocolate", description: "A refreshing cup!", mealType: MealTypes.breakfast),
-                    FoodItem(calorieCost: 500, name: "Bee Bites", description: "I dont know but I like it...", mealType: MealTypes.dinner),
-                    FoodItem(calorieCost: 200, name: "Rice", description: "Simple and clean is the way that you're making me feel tonight. It's hard to let it go. When you walk away, you dont hear me say \"please baby dont go.\"", mealType: MealTypes.snacks)
+                    FoodItem(calorieCost: 240, name: "Hot Chocolate", comment: "A refreshing cup!", mealType: MealTypes.breakfast),
+                    FoodItem(calorieCost: 500, name: "Bee Bites", comment: "I dont know but I like it...", mealType: MealTypes.dinner),
+                    FoodItem(calorieCost: 200, name: "Rice", comment: "Simple and clean is the way that you're making me feel tonight. It's hard to let it go. When you walk away, you dont hear me say \"please baby dont go.\"", mealType: MealTypes.snacks)
                 ]
             )
         )
