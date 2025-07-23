@@ -79,13 +79,13 @@ struct FoodDetailView: View {
                         }
                         dismiss()
                     }
-                    
                     if (!creating) {
                         editing.toggle()
                     }
                 } label: {
                     Image(systemName: editing ? "checkmark" : "square.and.pencil")
                 }
+                .buttonStyle(.glassProminent)
             }
             ToolbarItem(placement: .cancellationAction) {
                 if (creating) {

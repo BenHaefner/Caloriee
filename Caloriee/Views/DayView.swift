@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct DayView: View {
-    // TODO: Move to real data
     @Environment(\.modelContext) private var context
     @Bindable var user: Profile
     @Bindable var day: Day
@@ -19,6 +18,7 @@ struct DayView: View {
     @State private var newAnyDate = Date()
     var onChangeDate: (Date) -> Void
 
+    // TODO: Split this bitch up into more views for readability
     var body: some View {
         List{
             Section(content: {
@@ -91,13 +91,28 @@ struct DayView: View {
                     Image(systemName: "calendar")
                 }
                     .popover(isPresented: $selectingDate) {
-                        DatePicker("Selected Date", selection: $newAnyDate, displayedComponents: [.date])
-                            .datePickerStyle(.graphical)
-                        Button {
-                            selectingDate = false
-                        } label: {
-                            Image(systemName: "checkmark")
+                        VStack {
+                            HStack {
+                                Button {
+                                    selectingDate = false
+                                } label: {
+                                    Image(systemName: "multiply")
+                                }
+                                    .buttonStyle(.bordered)
+                                Spacer()
+                                Button {
+                                    selectingDate = false
+                                    onChangeDate(newAnyDate)
+                                } label: {
+                                    Image(systemName: "checkmark")
+                                }
+                                    .buttonStyle(.glassProminent)
+                            }
+                            DatePicker("Selected Date", selection: $newAnyDate, displayedComponents: [.date])
+                                .datePickerStyle(.graphical)
                         }
+                        .padding()
+                        .presentationDetents([.medium])
                     }
                 Button {
                     print("edit user")
