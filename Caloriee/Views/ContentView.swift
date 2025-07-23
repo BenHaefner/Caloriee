@@ -49,7 +49,6 @@ struct ContentView: View {
             if (day != nil) {
                 self.day = day!
             } else {
-                // TODO: Have the user set a goal when they first access the app
                 self.day = Day(date: today, foodItems: [])
                 context.insert(self.day!)
                 try context.save()
@@ -61,14 +60,14 @@ struct ContentView: View {
     
     private func reinitDate(for date: Date) async {
         do {
+            let newDate = Calendar.current.startOfDay(for: date)
             let days = try context.fetch(FetchDescriptor<Day>(
-                predicate: #Predicate {$0.date == date}
+                predicate: #Predicate {$0.date == newDate}
             ))
             let day = days.first
             if (day != nil) {
                 self.day = day!
             } else {
-                // TODO: Have the user set a goal when they first access the app
                 self.day = Day(date: date, foodItems: [])
                 context.insert(self.day!)
                 try context.save()

@@ -90,12 +90,13 @@ struct DayView: View {
                 } label: {
                     Image(systemName: "calendar")
                 }
-                    .sheet(isPresented: $selectingDate, onDismiss: {
-                        print(newAnyDate.description)
-                        onChangeDate(newAnyDate)
-                    }) {
-                        NavigationView {
-                            DateSelectorView(date: $newAnyDate)
+                    .popover(isPresented: $selectingDate) {
+                        DatePicker("Selected Date", selection: $newAnyDate, displayedComponents: [.date])
+                            .datePickerStyle(.graphical)
+                        Button {
+                            selectingDate = false
+                        } label: {
+                            Image(systemName: "checkmark")
                         }
                     }
                 Button {
