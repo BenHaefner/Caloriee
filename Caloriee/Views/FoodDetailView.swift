@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FoundationModels
 
 struct FoodDetailView: View {
     @Environment(\.modelContext) private var context
@@ -15,6 +16,7 @@ struct FoodDetailView: View {
     @State var editableFoodItem: EditableFoodItem
     @Bindable var day: Day
     var creating: Bool
+    private var model = SystemLanguageModel.default
 
     init(foodItem: Binding<FoodItem>, creating: Bool, day: Day) {
         editableFoodItem = EditableFoodItem(foodItem: foodItem.wrappedValue)
@@ -63,7 +65,7 @@ struct FoodDetailView: View {
         }
         .toolbar{
             ToolbarItemGroup(placement: .primaryAction) {
-                if(editing) {
+                if(editing && model.availability != .available) {
                     Button {
                         // TODO: Generate suggested calories
                         print("generate")
