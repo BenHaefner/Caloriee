@@ -77,7 +77,7 @@ struct FoodDetailView: View {
                         GeneratePopoverView(onGenerated: { generatedFoodItem in
                             Task {
                                 [
-                                    print(generatedFoodItem.name)
+                                    editableFoodItem = generatedFoodItem
                                 ]
                             }
                         })

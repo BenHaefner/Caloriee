@@ -5,8 +5,10 @@
 //  Created by Ben Haefner on 7/11/25.
 //
 import SwiftUI
+import FoundationModels
 
-enum MealTypes: String, CaseIterable, Identifiable, Codable {
+@Generable()
+enum MealTypes: String, CaseIterable, Identifiable, Codable, ConvertibleFromGeneratedContent {
     case breakfast = "Breakfast"
     case lunch = "Lunch"
     case dinner = "Dinner"
