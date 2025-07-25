@@ -4,11 +4,17 @@
 //
 //  Created by Ben Haefner on 7/22/25.
 //
+import FoundationModels
 
+@Generable
 struct EditableFoodItem {
+    @Guide(description: "A single number, best estimage of the amount of calories in this food item")
     var calorieCost: Int
+    @Guide(description: "A well formatted name for this food item")
     var name: String
+    @Guide(description: "A description of this food item")
     var comment: String
+    @Guide(description: "A suggested meal type for this food item")
     var mealType: MealTypes
     
     init(foodItem: FoodItem) {

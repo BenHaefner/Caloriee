@@ -8,6 +8,7 @@ import SwiftUI
 
 struct FoodView: View {
     let foodItem: FoodItem
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 5) {

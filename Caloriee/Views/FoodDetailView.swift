@@ -14,6 +14,7 @@ struct FoodDetailView: View {
     @Binding var foodItem: FoodItem
     @State var editing: Bool
     @State var editableFoodItem: EditableFoodItem
+    @State var generating: Bool = false
     @Bindable var day: Day
     var creating: Bool
     private var model = SystemLanguageModel.default
@@ -65,12 +66,21 @@ struct FoodDetailView: View {
         }
         .toolbar{
             ToolbarItemGroup(placement: .primaryAction) {
-                if(editing && model.availability != .available) {
+                if(editing && model.availability == .available) {
                     Button {
                         // TODO: Generate suggested calories
-                        print("generate")
+                        generating = true
                     } label: {
                         Image(systemName: "apple.intelligence")
+                    }
+                    .popover(isPresented: $generating) {
+                        GeneratePopoverView(onGenerated: { generatedFoodItem in
+                            Task {
+                                [
+                                    print(generatedFoodItem.name)
+                                ]
+                            }
+                        })
                     }
                 }
                 Button {
