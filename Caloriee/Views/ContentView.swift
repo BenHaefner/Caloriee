@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var context
     @State var user: Profile?
     @State var day: Day?
+    @State var initializeTask: String = ""
     
     var body: some View {
         if (user != nil || day != nil) {
@@ -21,15 +22,19 @@ struct ContentView: View {
                 }
             })
         } else {
-            ProgressView()
-                .task {
-                    await initializeData()
-                }
+            VStack {
+                Text(initializeTask)
+                ProgressView()
+                    .task {
+                        await initializeData()
+                    }
+            }
         }
     }
     
     private func initializeData() async {
         do {
+            initializeTask = "Initializing profile..."
             let profiles = try context.fetch(FetchDescriptor<Profile>())
             let profile = profiles.first
             if (profile != nil) {
@@ -40,7 +45,8 @@ struct ContentView: View {
                 context.insert(self.user!)
                 try context.save()
             }
-            
+
+            initializeTask = "Initializing day..."
             let today = Calendar.current.startOfDay(for: Date())
             let days = try context.fetch(FetchDescriptor<Day>(
                 predicate: #Predicate {$0.date == today}
@@ -53,6 +59,24 @@ struct ContentView: View {
                 context.insert(self.day!)
                 try context.save()
             }
+
+            initializeTask = "Initializing food database..."
+            var foundations = FetchDescriptor<FoundationFood>()
+            foundations.fetchLimit = 1
+            let existingFoods = try context.fetch(foundations)
+            let isDatabaseEmpty = existingFoods.isEmpty
+            if isDatabaseEmpty {
+                if let url = Bundle.main.url(forResource: "FoundationFoods", withExtension: "json"),
+                   let data = try? Data(contentsOf: url) {
+                    let decoder = JSONDecoder()
+                    let foods = try decoder.decode([CodableFoundationFood].self, from: data)
+                    for food in foods {
+                        context.insert(food)
+                    }
+                    try context.save()
+                }
+            }
+            
         } catch {
             fatalError("Error retrieving initial data: \(error)")
         }

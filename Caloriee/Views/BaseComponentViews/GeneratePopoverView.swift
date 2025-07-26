@@ -75,7 +75,7 @@ struct GeneratePopoverView: View {
                 for food items that the user doesnt know or isnt certain about how many calories are in them.
                 Estimate the calories found in the user provided description for a food item.
                 Only estimate the calories for the exact item that the user specifies, and not any form of meal,
-                unless the user lists multiple items or quantities.
+                unless the user lists multiple items or quantities. Be polite.
                 """
             let session = LanguageModelSession(instructions: instructions)
             let response = try await session.respond(to: generatedFoodItemDescription, generating: EditableFoodItem.self)

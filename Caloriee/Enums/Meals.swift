@@ -18,4 +18,3 @@ enum MealTypes: String, CaseIterable, Identifiable, Codable, ConvertibleFromGene
     var id: String { self.rawValue }
     var name: String { self.rawValue }
 }
-

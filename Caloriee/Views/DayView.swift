@@ -73,7 +73,7 @@ struct DayView: View {
                 } label: {
                     Image(systemName: "chevron.forward")
                 }
-                Button() {
+              Button() {
                     addingFood = true;
                 } label: {
                     Image(systemName: "plus.square")
