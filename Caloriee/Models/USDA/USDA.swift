@@ -44,23 +44,28 @@ class FoundationFood {
 }
 
 // MARK: - FoodCategory
+@Model
 class FoodCategory {
-    let description: String
+    var categoryDescription: String
 
     init(description: String) {
-        self.description = description
+        self.categoryDescription = description
     }
 }
 
 // MARK: - FoundationFoodFoodNutrient
+@Model
 class FoundationFoodFoodNutrient {
-    let type: String
-    let id: Int
-    let nutrient: Nutrient
-    let dataPoints: Int?
-    let foodNutrientDerivation: FoodNutrientDerivation
-    let median, amount, max, min: Double?
-    let footnote: String?
+    var type: String
+    var id: Int
+    var nutrient: Nutrient
+    var dataPoints: Int?
+    var foodNutrientDerivation: FoodNutrientDerivation
+    var median: Double?
+    var amount: Double?
+    var max: Double?
+    var min: Double?
+    var footnote: String?
 
     init(type: String, id: Int, nutrient: Nutrient, dataPoints: Int?, foodNutrientDerivation: FoodNutrientDerivation, median: Double?, amount: Double?, max: Double?, min: Double?, footnote: String?) {
         self.type = type
@@ -77,38 +82,41 @@ class FoundationFoodFoodNutrient {
 }
 
 // MARK: - FoodNutrientDerivation
+@Model
 class FoodNutrientDerivation {
-    let code: String?
-    let description: String?
-    let foodNutrientSource: Food
+    var code: String?
+    var derevationDescription: String?
+    var foodNutrientSource: Food
 
     init(code: String?, description: String?, foodNutrientSource: Food) {
         self.code = code
-        self.description = description
+        self.derevationDescription = description
         self.foodNutrientSource = foodNutrientSource
     }
 }
 
 // MARK: - Food
+@Model
 class Food {
-    let id: Int?
-    let code: String?
-    let description: String?
+    var id: Int?
+    var code: String?
+    var foodDescription: String?
 
     init(id: Int?, code: String?, description: String?) {
         self.id = id
         self.code = code
-        self.description = description
+        self.foodDescription = description
     }
 }
 
 // MARK: - Nutrient
+@Model
 class Nutrient {
-    let id: Int
-    let number: String
-    let name: String
-    let rank: Int
-    let unitName: String
+    var id: Int
+    var number: String
+    var name: String
+    var rank: Int
+    var unitName: String
 
     init(id: Int, number: String, name: String, rank: Int, unitName: String) {
         self.id = id
@@ -120,15 +128,16 @@ class Nutrient {
 }
 
 // MARK: - FoundationFoodFoodPortion
+@Model
 class FoundationFoodFoodPortion {
-    let id: Int
-    let value: Double
-    let measureUnit: MeasureUnit
-    let modifier: String?
-    let gramWeight: Double
-    let sequenceNumber: Int
-    let amount: Double
-    let minYearAcquired: Int
+    var id: Int
+    var value: Double
+    var measureUnit: MeasureUnit
+    var modifier: String?
+    var gramWeight: Double
+    var sequenceNumber: Int
+    var amount: Double
+    var minYearAcquired: Int
 
     init(id: Int, value: Double, measureUnit: MeasureUnit, modifier: String?, gramWeight: Double, sequenceNumber: Int, amount: Double, minYearAcquired: Int) {
         self.id = id
@@ -143,10 +152,11 @@ class FoundationFoodFoodPortion {
 }
 
 // MARK: - MeasureUnit
+@Model
 class MeasureUnit {
-    let id: Int
-    let name: String
-    let abbreviation: String
+    var id: Int
+    var name: String
+    var abbreviation: String
 
     init(id: Int, name: String, abbreviation: String) {
         self.id = id
@@ -156,26 +166,28 @@ class MeasureUnit {
 }
 
 // MARK: - FoundationFoodInputFood
+@Model
 class FoundationFoodInputFood {
-    let id: Int
-    let foodDescription: String
-    let inputFood: InputFoodInputFood
+    var id: Int
+    var foodDescription: String
+    var inputFood: NestedInputFood
 
-    init(id: Int, foodDescription: String, inputFood: InputFoodInputFood) {
+    init(id: Int, foodDescription: String, inputFood: NestedInputFood) {
         self.id = id
         self.foodDescription = foodDescription
         self.inputFood = inputFood
     }
 }
 
-// MARK: - InputFoodInputFood
-class InputFoodInputFood {
-    let foodClass: String
-    let description: String
-    let dataType: String
-    let foodCategory: Food
-    let fdcID: Int
-    let publicationDate: String
+// MARK: - NestedInputFood
+@Model
+class NestedInputFood {
+    var foodClass: String
+    var inputFoodDescription: String
+    var dataType: String
+    var foodCategory: Food
+    var fdcID: Int
+    var publicationDate: String
 
     enum CodingKeys: String, CodingKey {
         case foodClass, description, dataType, foodCategory
@@ -185,7 +197,7 @@ class InputFoodInputFood {
 
     init(foodClass: String, description: String, dataType: String, foodCategory: Food, fdcID: Int, publicationDate: String) {
         self.foodClass = foodClass
-        self.description = description
+        self.inputFoodDescription = description
         self.dataType = dataType
         self.foodCategory = foodCategory
         self.fdcID = fdcID
@@ -194,10 +206,14 @@ class InputFoodInputFood {
 }
 
 // MARK: - NutrientConversionFactor
+@Model
 class NutrientConversionFactor {
-    let type: String
-    let proteinValue, fatValue, carbohydrateValue, value: Double?
-    let nitrogenValue: Double?
+    var type: String
+    var proteinValue: Double?
+    var fatValue: Double?
+    var carbohydrateValue: Double?
+    var value: Double?
+    var nitrogenValue: Double?
 
     init(type: String, proteinValue: Double?, fatValue: Double?, carbohydrateValue: Double?, value: Double?, nitrogenValue: Double?) {
         self.type = type
@@ -252,12 +268,13 @@ class SurveyFood {
 }
 
 // MARK: - FoodAttribute
+@Model
 class FoodAttribute {
-    let id: Int
-    let name: String?
-    let value: String
-    let foodAttributeType: FoodAttributeType
-    let rank: Int?
+    var id: Int
+    var name: String?
+    var value: String
+    var foodAttributeType: FoodAttributeType
+    var rank: Int?
 
     init(id: Int, name: String?, value: String, foodAttributeType: FoodAttributeType, rank: Int?) {
         self.id = id
@@ -269,24 +286,26 @@ class FoodAttribute {
 }
 
 // MARK: - FoodAttributeType
+@Model
 class FoodAttributeType {
-    let id: Int
-    let name: String
-    let description: String
+    var id: Int
+    var name: String
+    var foodAttributeTypeDescription: String
 
     init(id: Int, name: String, description: String) {
         self.id = id
         self.name = name
-        self.description = description
+        self.foodAttributeTypeDescription = description
     }
 }
 
 // MARK: - SurveyFoodFoodNutrient
+@Model
 class SurveyFoodFoodNutrient {
-    let type: String
-    let id: Int
-    let nutrient: Nutrient
-    let amount: Double
+    var type: String
+    var id: Int
+    var nutrient: Nutrient
+    var amount: Double
 
     init(type: String, id: Int, nutrient: Nutrient, amount: Double) {
         self.type = type
@@ -297,13 +316,14 @@ class SurveyFoodFoodNutrient {
 }
 
 // MARK: - SurveyFoodFoodPortion
+@Model
 class SurveyFoodFoodPortion {
-    let id: Int
-    let measureUnit: MeasureUnit
-    let modifier: String
-    let gramWeight: Double
-    let portionDescription: String
-    let sequenceNumber: Int
+    var id: Int
+    var measureUnit: MeasureUnit
+    var modifier: String
+    var gramWeight: Double
+    var portionDescription: String
+    var sequenceNumber: Int
 
     init(id: Int, measureUnit: MeasureUnit, modifier: String, gramWeight: Double, portionDescription: String, sequenceNumber: Int) {
         self.id = id
@@ -316,17 +336,19 @@ class SurveyFoodFoodPortion {
 }
 
 // MARK: - SurveyFoodInputFood
+@Model
 class SurveyFoodInputFood {
-    let id: Int
-    let unit: String
-    let portionDescription: String
-    let portionCode, foodDescription: String
-    let retentionCode: Int
-    let ingredientWeight: Double
-    let ingredientCode: Int
-    let ingredientDescription: String
-    let amount: Double
-    let sequenceNumber: Int
+    var id: Int
+    var unit: String
+    var portionDescription: String
+    var portionCode: String
+    var foodDescription: String
+    var retentionCode: Int
+    var ingredientWeight: Double
+    var ingredientCode: Int
+    var ingredientDescription: String
+    var amount: Double
+    var sequenceNumber: Int
 
     init(id: Int, unit: String, portionDescription: String, portionCode: String, foodDescription: String, retentionCode: Int, ingredientWeight: Double, ingredientCode: Int, ingredientDescription: String, amount: Double, sequenceNumber: Int) {
         self.id = id
@@ -344,9 +366,10 @@ class SurveyFoodInputFood {
 }
 
 // MARK: - WweiaFoodCategory
+@Model
 class WweiaFoodCategory {
-    let wweiaFoodCategoryDescription: String
-    let wweiaFoodCategoryCode: Int
+    var wweiaFoodCategoryDescription: String
+    var wweiaFoodCategoryCode: Int
 
     init(wweiaFoodCategoryDescription: String, wweiaFoodCategoryCode: Int) {
         self.wweiaFoodCategoryDescription = wweiaFoodCategoryDescription
@@ -454,13 +477,13 @@ extension FoundationFoodInputFood {
         self.init(
             id: codable.id,
             foodDescription: codable.foodDescription,
-            inputFood: InputFoodInputFood(from: codable.inputFood)
+            inputFood: NestedInputFood(from: codable.inputFood)
         )
     }
 }
 
-extension InputFoodInputFood {
-    convenience init(from codable: CodableInputFoodInputFood) {
+extension NestedInputFood {
+    convenience init(from codable: CodableNestedInputFood) {
         self.init(
             foodClass: codable.foodClass,
             description: codable.description,
@@ -583,3 +606,4 @@ extension FoodAttributeType {
         )
     }
 }
+

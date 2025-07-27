@@ -69,20 +69,27 @@ struct GeneratePopoverView: View {
     }
 
     private func generateFoodItem() async {
-        do {
-            let instructions = """
-                The intention behind this application is to track calories and provide estimations
-                for food items that the user doesnt know or isnt certain about how many calories are in them.
-                Estimate the calories found in the user provided description for a food item.
-                Only estimate the calories for the exact item that the user specifies, and not any form of meal,
-                unless the user lists multiple items or quantities. Be polite.
-                """
-            let session = LanguageModelSession(instructions: instructions)
-            let response = try await session.respond(to: generatedFoodItemDescription, generating: EditableFoodItem.self)
-            onGenerated(response.content)
-            dismiss()
-        } catch {
-            fatalError("Error while generating food item : \(error)")
+        for i in 0..<3 {
+            do {
+                let instructions = """
+                    The intention behind this application is to track calories and provide estimations
+                    for food items that the user doesnt know or isnt certain about how many calories are in them.
+                    Estimate the calories found in the user provided description for a food item.
+                    Only estimate the calories for the exact item that the user specifies, and not any form of meal,
+                    unless the user lists multiple items or quantities. Be polite and non judgemental. Assume the user
+                    is asking about a food item.
+                    """
+                let session = LanguageModelSession(instructions: instructions)
+                let prompt = "Estimate the calories in the following food: \(generatedFoodItemDescription)"
+                let response = try await session.respond(to: prompt, generating: EditableFoodItem.self)
+                onGenerated(response.content)
+                dismiss()
+                break
+            } catch {
+                if (i == 2) {
+                    fatalError("Error while generating food item : \(error)")
+                }
+            }
         }
     }
 }

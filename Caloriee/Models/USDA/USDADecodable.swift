@@ -8,6 +8,53 @@
 
 import Foundation
 
+// MARK: - Usda
+struct CodableUsda: Codable {
+    let surveyFoods: [CodableSurveyFood]?
+    let foundationFoods: [CodableFoundationFood]?
+
+    enum CodingKeys: String, CodingKey {
+        case surveyFoods = "SurveyFoods"
+        case foundationFoods = "FoundationFoods"
+    }
+}
+
+// MARK: Usda convenience initializers and mutators
+extension CodableUsda {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(CodableUsda.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        surveyFoods: [CodableSurveyFood]?? = nil,
+        foundationFoods: [CodableFoundationFood]?? = nil
+    ) -> CodableUsda {
+        return CodableUsda(
+            surveyFoods: surveyFoods ?? self.surveyFoods,
+            foundationFoods: foundationFoods ?? self.foundationFoods
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
 // MARK: - CodableFoundationFood
 struct CodableFoundationFood: Codable {
     let foodClass: String
@@ -466,7 +513,7 @@ extension CodableMeasureUnit {
 struct CodableFoundationFoodInputFood: Codable {
     let id: Int
     let foodDescription: String
-    let inputFood: CodableInputFoodInputFood
+    let inputFood: CodableNestedInputFood
 }
 
 // MARK: CodableFoundationFoodInputFood convenience initializers and mutators
@@ -490,7 +537,7 @@ extension CodableFoundationFoodInputFood {
     func with(
         id: Int? = nil,
         foodDescription: String? = nil,
-        inputFood: CodableInputFoodInputFood? = nil
+        inputFood: CodableNestedInputFood? = nil
     ) -> CodableFoundationFoodInputFood {
         return CodableFoundationFoodInputFood(
             id: id ?? self.id,
@@ -508,8 +555,8 @@ extension CodableFoundationFoodInputFood {
     }
 }
 
-// MARK: - CodableInputFoodInputFood
-struct CodableInputFoodInputFood: Codable {
+// MARK: - CodableNestedInputFood
+struct CodableNestedInputFood: Codable {
     let foodClass: String
     let description: String
     let dataType: String
@@ -524,11 +571,11 @@ struct CodableInputFoodInputFood: Codable {
     }
 }
 
-// MARK: CodableInputFoodInputFood convenience initializers and mutators
+// MARK: CodableNestedInputFood convenience initializers and mutators
 
-extension CodableInputFoodInputFood {
+extension CodableNestedInputFood {
     init(data: Data) throws {
-        self = try newJSONDecoder().decode(CodableInputFoodInputFood.self, from: data)
+        self = try newJSONDecoder().decode(CodableNestedInputFood.self, from: data)
     }
 
     init(_ json: String, using encoding: String.Encoding = .utf8) throws {
@@ -549,8 +596,8 @@ extension CodableInputFoodInputFood {
         foodCategory: CodableFood? = nil,
         fdcID: Int? = nil,
         publicationDate: String? = nil
-    ) -> CodableInputFoodInputFood {
-        return CodableInputFoodInputFood(
+    ) -> CodableNestedInputFood {
+        return CodableNestedInputFood(
             foodClass: foodClass ?? self.foodClass,
             description: description ?? self.description,
             dataType: dataType ?? self.dataType,

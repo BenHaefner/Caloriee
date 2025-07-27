@@ -63,20 +63,34 @@ struct ContentView: View {
             initializeTask = "Initializing food database..."
             var foundations = FetchDescriptor<FoundationFood>()
             foundations.fetchLimit = 1
-            let existingFoods = try context.fetch(foundations)
-            let isDatabaseEmpty = existingFoods.isEmpty
-            if isDatabaseEmpty {
-                if let url = Bundle.main.url(forResource: "FoundationFoods", withExtension: "json"),
+            let existingFoundationFoods = try context.fetch(foundations)
+            if existingFoundationFoods.isEmpty {
+                if let url = Bundle.main.url(forResource: "USDA_FF_2025-04-24", withExtension: "json"),
                    let data = try? Data(contentsOf: url) {
                     let decoder = JSONDecoder()
-                    let foods = try decoder.decode([CodableFoundationFood].self, from: data)
-                    for food in foods {
+                    let decodedFoods = try decoder.decode(CodableUsda.self, from: data)
+                    let persistableFoods = decodedFoods.foundationFoods!.map { FoundationFood(from: $0) }
+                    for food in persistableFoods {
                         context.insert(food)
                     }
                     try context.save()
                 }
             }
-            
+            var surveys = FetchDescriptor<SurveyFood>()
+            surveys.fetchLimit = 1
+            let existingSurveyFoods = try context.fetch(surveys)
+            if existingSurveyFoods.isEmpty {
+                if let url = Bundle.main.url(forResource: "USDA_FNDDS_2024_10", withExtension: "json"),
+                   let data = try? Data(contentsOf: url) {
+                    let decoder = JSONDecoder()
+                    let decodedFoods = try decoder.decode(CodableUsda.self, from: data)
+                    let persistableFoods = decodedFoods.surveyFoods!.map { SurveyFood(from: $0) }
+                    for food in persistableFoods {
+                        context.insert(food)
+                    }
+                    try context.save()
+                }
+            }
         } catch {
             fatalError("Error retrieving initial data: \(error)")
         }
@@ -104,6 +118,6 @@ struct ContentView: View {
 
 #Preview {
     NavigationView {
-        ContentView().modelContainer(for: [Day.self, Profile.self], inMemory: true)
+        ContentView().modelContainer(for: [Day.self, Profile.self, FoundationFood.self, SurveyFood.self], inMemory: true)
     }
 }
