@@ -10,6 +10,7 @@ import FoundationModels
 
 // TODO: Move into popover in FoodDetailView
 struct GeneratePopoverView: View {
+    @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
     @State var generatedFoodItemDescription: String = ""
     @State var generatingFood: Bool = false
@@ -72,15 +73,13 @@ struct GeneratePopoverView: View {
         for i in 0..<3 {
             do {
                 let instructions = """
-                    The intention behind this application is to track calories and provide estimations
-                    for food items that the user doesnt know or isnt certain about how many calories are in them.
-                    Estimate the calories found in the user provided description for a food item.
-                    Only estimate the calories for the exact item that the user specifies, and not any form of meal,
-                    unless the user lists multiple items or quantities. Be polite and non judgemental. Assume the user
-                    is asking about a food item.
+                    Always use the provided searchUSDADatabases tool to try to find exact information to estimate calories in the item yourself. 
+                    Analyze the response and see if there is anything there in the information that could be used to esitmate the calories in the
+                    item. If not estimate it yourself. Make sure you flesh out the responses description with more information on the food even if 
+                    using information from the database. Assume the user is inputting an actual food item.
                     """
-                let session = LanguageModelSession(instructions: instructions)
-                let prompt = "Estimate the calories in the following food: \(generatedFoodItemDescription)"
+                let session = LanguageModelSession(tools: [IntelligentSearchTool(context: context)], instructions: instructions)
+                let prompt = "Politely, and under the assumption that the user is inputting an actual food item, estimate the calories in the following food: \(generatedFoodItemDescription)"
                 let response = try await session.respond(to: prompt, generating: EditableFoodItem.self)
                 onGenerated(response.content)
                 dismiss()

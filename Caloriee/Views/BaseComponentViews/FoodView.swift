@@ -18,6 +18,7 @@ struct FoodView: View {
                 if !foodItem.comment.isEmpty {
                     Text(foodItem.comment)
                         .font(.caption2)
+                        .lineLimit(2)
                         .foregroundStyle(.secondary)
                 }
             }

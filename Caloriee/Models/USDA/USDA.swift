@@ -4,6 +4,8 @@
 //
 //  Created by Ben Haefner on 7/26/25.
 //
+// This file was generated from JSON Schema using quicktype
+
 import Foundation
 import SwiftData
 

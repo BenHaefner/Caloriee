@@ -182,10 +182,6 @@ extension CodableFoodCategory {
     }
 }
 
-// Removed FoodCategoryDescription enum
-
-// Removed FoundationFoodFoodClass enum
-
 // MARK: - CodableFoundationFoodFoodNutrient
 struct CodableFoundationFoodFoodNutrient: Codable {
     let type: String
@@ -249,9 +245,6 @@ extension CodableFoundationFoodFoodNutrient {
         return String(data: try self.jsonData(), encoding: encoding)
     }
 }
-
-// Removed Code enum
-// Removed FoodNutrientDerivationDescription enum
 
 // MARK: - CodableFoodNutrientDerivation
 struct CodableFoodNutrientDerivation: Codable {
@@ -397,10 +390,6 @@ extension CodableNutrient {
     }
 }
 
-// Removed NutrientName enum
-// Removed UnitName enum
-// Removed FoodNutrientType enum
-
 // MARK: - CodableFoundationFoodFoodPortion
 struct CodableFoundationFoodFoodPortion: Codable {
     let id: Int
@@ -506,8 +495,6 @@ extension CodableMeasureUnit {
         return String(data: try self.jsonData(), encoding: encoding)
     }
 }
-
-// Removed Abbreviation enum
 
 // MARK: - CodableFoundationFoodInputFood
 struct CodableFoundationFoodInputFood: Codable {
@@ -616,10 +603,6 @@ extension CodableNestedInputFood {
     }
 }
 
-// Removed InputFoodDataType enum
-// Removed InputFoodFoodClass enum
-// Removed PublicationDate enum
-
 // MARK: - CodableNutrientConversionFactor
 struct CodableNutrientConversionFactor: Codable {
     let type: String
@@ -671,8 +654,6 @@ extension CodableNutrientConversionFactor {
         return String(data: try self.jsonData(), encoding: encoding)
     }
 }
-
-// Removed NutrientConversionFactorType enum
 
 // MARK: - CodableSurveyFood
 struct CodableSurveyFood: Codable {
@@ -758,9 +739,6 @@ extension CodableSurveyFood {
         return String(data: try self.jsonData(), encoding: encoding)
     }
 }
-
-// Removed SurveyFoodDataType enum
-// Removed EndDate enum
 
 // MARK: - CodableFoodAttribute
 struct CodableFoodAttribute: Codable {
@@ -1032,10 +1010,6 @@ extension CodableSurveyFoodInputFood {
         return String(data: try self.jsonData(), encoding: encoding)
     }
 }
-
-// Removed PortionDescription enum
-// Removed Unit enum
-// Removed StartDate enum
 
 // MARK: - CodableWweiaFoodCategory
 struct CodableWweiaFoodCategory: Codable {
