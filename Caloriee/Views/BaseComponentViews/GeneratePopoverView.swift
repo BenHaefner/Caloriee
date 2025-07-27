@@ -14,6 +14,7 @@ struct GeneratePopoverView: View {
     @Environment(\.dismiss) var dismiss
     @State var generatedFoodItemDescription: String = ""
     @State var generatingFood: Bool = false
+    @State var failedGeneration: Bool = false
     var onGenerated: (EditableFoodItem) -> Void
     
     var body: some View {
@@ -28,29 +29,38 @@ struct GeneratePopoverView: View {
                 Spacer()
             }
             if !(generatingFood) {
-                Text("Please describe the food you want Apple Intelligence to estimate for you")
-                    .font(.headline)
+                if (failedGeneration) {
+                    Spacer()
+                    Text("There was an error while generating your food item. Please try again later.")
+                        .font(.headline)
+                    Spacer()
 
-                ZStack {
-                    TextEditor(text: $generatedFoodItemDescription)
-                        .padding()
-                }
-                .scrollContentBackground(.hidden)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(20)
+                } else {
+                    Text("Please describe the food you want Apple Intelligence to estimate for you")
+                        .font(.headline)
 
-                Button {
-                    generatingFood = true
-                    
-                } label: {
-                    HStack {
-                        Image(systemName: "apple.intelligence")
-                        Text("Generate")
+                    ZStack {
+                        TextEditor(text: $generatedFoodItemDescription)
+                            .padding()
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                    .scrollContentBackground(.hidden)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(20)
+
+                    Button {
+                        generatingFood = true
+                        
+                    } label: {
+                        HStack {
+                            Image(systemName: "sparkles")
+                            Text("Generate")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                    }
+                    .buttonStyle(.glassProminent)
+
                 }
-                .buttonStyle(.glassProminent)
             } else {
                 VStack (alignment: .center) {
                     Spacer()
@@ -86,8 +96,10 @@ struct GeneratePopoverView: View {
                 break
             } catch {
                 if (i == 2) {
-                    fatalError("Error while generating food item : \(error)")
+                    generatingFood = false
+                    failedGeneration = true
                 }
+                print("Error while generating food item : \(error)")
             }
         }
     }

@@ -15,6 +15,7 @@ struct FoodDetailView: View {
     @State var editing: Bool
     @State var editableFoodItem: EditableFoodItem
     @State var generating: Bool = false
+    @State var selecting: Bool = false
     @Bindable var day: Day
     var creating: Bool
     private var model = SystemLanguageModel.default
@@ -68,10 +69,9 @@ struct FoodDetailView: View {
             ToolbarItemGroup(placement: .primaryAction) {
                 if(editing && model.availability == .available) {
                     Button {
-                        // TODO: Generate suggested calories
-                        generating = true
+                        if (!selecting) { generating = true }
                     } label: {
-                        Image(systemName: "apple.intelligence")
+                        Image(systemName: "sparkles")
                     }
                     .popover(isPresented: $generating) {
                         GeneratePopoverView(onGenerated: { generatedFoodItem in
@@ -83,6 +83,18 @@ struct FoodDetailView: View {
                         })
                     }
                 }
+
+                if (editing) {
+                    Button {
+                        if (!generating) { selecting = true }
+                    } label: {
+                        Image(systemName: "list.bullet")
+                    }
+                    .popover(isPresented: $selecting) {
+                        SelectableFoodView()
+                    }
+                }
+
                 Button {
                     if (editing) {
                         editableFoodItem.copy(to: foodItem)
@@ -106,18 +118,6 @@ struct FoodDetailView: View {
                     } label: {
                         Image(systemName: "multiply")
                     }
-                }
-            }
-            ToolbarItem(placement:.title) {
-                if (creating) {
-                    Text("Add")
-                        .font(.title2)
-                } else if (editing) {
-                    Text("Edit")
-                        .font(.title2)
-                } else {
-                    Text("Detail")
-                        .font(.title2)
                 }
             }
         }
