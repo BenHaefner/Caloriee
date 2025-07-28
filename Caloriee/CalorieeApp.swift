@@ -16,8 +16,9 @@ struct CalorieeApp: App {
         WindowGroup {
             NavigationView {
                 ContentView()
+                    .modelContainer(sharedCalorieeContainer)
             }
-        }.modelContainer(sharedCalorieeContainer)
+        }.modelContainer(sharedCalorieeContainer) // TODO: Look into where this needs to go
     }
     
     static private func calorieeContainer() -> ModelContainer {
