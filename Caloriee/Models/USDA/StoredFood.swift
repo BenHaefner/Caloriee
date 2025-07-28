@@ -20,7 +20,6 @@ public class StoredFood {
     
     init(name: String, calories: Int, portionWeight: Double?, usdaId: Int, udsaSource: String) {
         self.name = name
-        // TODO if portion weight is given we should multiply calories by protionWeight/100
         if (portionWeight != nil) {
             self.calories = Int(Double(calories) * (portionWeight!/100.0))
         } else {

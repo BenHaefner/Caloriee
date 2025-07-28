@@ -6,12 +6,39 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SelectableFoodView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
-    @State private var searchText: String = ""
-    @State private var foodSearchResults: [String] = []
+    @State var searchText: String = ""
+    @State var foodSearchResults: [StoredFood] = []
+    @State var searchTask: Task<Void, Never>? = nil
+    @State var selected: StoredFood?
+    var onSelected: (StoredFood) -> Void
+
+    // I dont love bringing this into memory but there seems to be
+    // some thread safety issues swift data isnt great at handling
+    // and this was a suggestion. It also should help with performance
+    // of the search itself but i dont like the tradeoff. Might
+    // circle back but right now i want to move on.
+    @Query()
+    private var foods: [StoredFood]
+    
+    private func getFoodSearchResults() async throws -> Void {
+        searchTask?.cancel()
+        searchTask = Task {
+            do {
+                if (searchText.isEmpty) {
+                    await MainActor.run { foodSearchResults = [] }
+                } else {
+                    foodSearchResults = try foods.filter(#Predicate {$0.name.localizedStandardContains(searchText)})
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
 
     var body: some View {
         VStack (alignment: .center){
@@ -24,7 +51,12 @@ struct SelectableFoodView: View {
                 .buttonStyle(.bordered)
                 Spacer()
                 Button {
-                    dismiss()
+                    if (selected != nil) {
+                        onSelected(selected!)
+                        dismiss()
+                    } else {
+                        dismiss()
+                    }
                 } label: {
                     Image(systemName: "checkmark")
                 }
@@ -37,12 +69,8 @@ struct SelectableFoodView: View {
                 Spacer()
             } else {
                 NavigationStack {
-                    List{
-                        Section {
-                            ForEach(foodSearchResults, id: \.self) { result in
-                                Text(result)
-                            }
-                        }
+                    List (foodSearchResults, id: \.self, selection: $selected) { result in
+                        Text(result.name)
                     }
                 }
                 .cornerRadius(20)
@@ -50,7 +78,11 @@ struct SelectableFoodView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                 TextField("Search for foods", text: $searchText)
-                // TODO: Search when we change this field
+                    .onChange(of: searchText) {
+                        Task {
+                            try await getFoodSearchResults()
+                        }
+                    }
             }
             .padding()
             .glassEffect()
@@ -59,8 +91,4 @@ struct SelectableFoodView: View {
         .padding()
         .presentationDetents([.medium])
     }
-}
-
-#Preview {
-    SelectableFoodView()
 }

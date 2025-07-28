@@ -91,7 +91,12 @@ struct FoodDetailView: View {
                         Image(systemName: "list.bullet")
                     }
                     .popover(isPresented: $selecting) {
-                        SelectableFoodView()
+                        SelectableFoodView(onSelected: { selectedStoredFood in
+                            Task {
+                                editableFoodItem.name = selectedStoredFood.name
+                                editableFoodItem.calorieCost = selectedStoredFood.calories
+                            }
+                        })
                     }
                 }
 
