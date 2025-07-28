@@ -28,9 +28,10 @@ struct IntelligentSearchTool: Tool {
     
     func call(arguments: Arguments) async throws -> ToolOutput {
         let Foods = try await getFoodData(search: arguments.searchTerm, context: context)
+        let mappedFoods = Foods.map{"\($0.name) - \($0.calories) cal"}.joined(separator: "\n")
         let returnableOptions = """
                 Here is an array of food from the USDA to help inform your estimation that
-                may match the intended food item information \(Foods.joined(separator: ","))
+                may match the intended food item information \(mappedFoods)
             """
         print(returnableOptions)
         return ToolOutput(returnableOptions)

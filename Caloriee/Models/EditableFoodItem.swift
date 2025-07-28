@@ -8,7 +8,7 @@ import FoundationModels
 
 @Generable
 struct EditableFoodItem {
-    @Guide(description: "A single number, best estimate of the amount of calories in this food")
+    @Guide(description: "A single numberestimate of the amount of calories in this food. ALWAYS Use the USDA Database tool before estimating this number to ensure accuracy. Assume your estimation is likely to be inaccurate without searching the database.")
     var calorieCost: Int
     @Guide(description: "A well formatted and concise name for a food name based on a user description")
     var name: String

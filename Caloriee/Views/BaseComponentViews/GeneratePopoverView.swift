@@ -83,13 +83,12 @@ struct GeneratePopoverView: View {
         for i in 0..<3 {
             do {
                 let instructions = """
-                    Always use the provided searchUSDADatabases tool to try to find exact information to estimate calories in the item yourself. 
-                    Analyze the response and see if there is anything there in the information that could be used to esitmate the calories in the
-                    item. If not estimate it yourself. Make sure you flesh out the responses description with more information on the food even if 
-                    using information from the database. Assume the user is inputting an actual food item.
+                    ALWAYS Use the searchUSDADatabases tool EVERY TIME to help you determine 
+                    the calories in a user provided food item. You will be inaccurate
+                    without at least first searching the database.
                     """
                 let session = LanguageModelSession(tools: [IntelligentSearchTool(context: context)], instructions: instructions)
-                let prompt = "Politely, and under the assumption that the user is inputting an actual food item, estimate the calories in the following food: \(generatedFoodItemDescription)"
+                let prompt = "\(generatedFoodItemDescription)"
                 let response = try await session.respond(to: prompt, generating: EditableFoodItem.self)
                 onGenerated(response.content)
                 dismiss()

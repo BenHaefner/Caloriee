@@ -61,30 +61,33 @@ struct ContentView: View {
             }
 
             initializeTask = "Initializing food database..."
-            var foundations = FetchDescriptor<FoundationFood>()
-            foundations.fetchLimit = 1
-            let existingFoundationFoods = try context.fetch(foundations)
-            if existingFoundationFoods.isEmpty {
+            var foods = FetchDescriptor<StoredFood>()
+            foods.fetchLimit = 1
+            let existingFoods = try context.fetch(foods)
+            if existingFoods.isEmpty {
                 if let url = Bundle.main.url(forResource: "USDA_FF_2025-04-24", withExtension: "json"),
                    let data = try? Data(contentsOf: url) {
                     let decoder = JSONDecoder()
                     let decodedFoods = try decoder.decode(CodableUsda.self, from: data)
-                    let persistableFoods = decodedFoods.foundationFoods!.map { FoundationFood(from: $0) }
+                    let filteredDecodedFoods = try decodedFoods.foundationFoods!.filter(#Predicate {
+                        $0.foodNutrients.contains(where: {
+                            $0.nutrient.unitName == "kcal"
+                    })})
+                    let persistableFoods = filteredDecodedFoods.map { StoredFood(name: $0.description, calories: Int(($0.foodNutrients.first(where: {$0.nutrient.unitName == "kcal"}))!.amount!), portionWeight: $0.foodPortions?.first?.gramWeight, usdaId: $0.fdcID, udsaSource: "FoundationFoods") }
                     for food in persistableFoods {
                         context.insert(food)
                     }
                     try context.save()
                 }
-            }
-            var surveys = FetchDescriptor<SurveyFood>()
-            surveys.fetchLimit = 1
-            let existingSurveyFoods = try context.fetch(surveys)
-            if existingSurveyFoods.isEmpty {
                 if let url = Bundle.main.url(forResource: "USDA_FNDDS_2024_10", withExtension: "json"),
                    let data = try? Data(contentsOf: url) {
                     let decoder = JSONDecoder()
                     let decodedFoods = try decoder.decode(CodableUsda.self, from: data)
-                    let persistableFoods = decodedFoods.surveyFoods!.map { SurveyFood(from: $0) }
+                    let filteredDecodedFoods = try decodedFoods.surveyFoods!.filter(#Predicate {
+                        $0.foodNutrients.contains(where: {
+                            $0.nutrient.unitName == "kcal"
+                    })})
+                    let persistableFoods = filteredDecodedFoods.map { StoredFood(name: $0.description, calories: Int(($0.foodNutrients.first(where: {$0.nutrient.unitName == "kcal"}))!.amount), portionWeight: $0.foodPortions.first?.gramWeight, usdaId: $0.fdcID, udsaSource: "Survey") }
                     for food in persistableFoods {
                         context.insert(food)
                     }
@@ -118,6 +121,6 @@ struct ContentView: View {
 
 #Preview {
     NavigationView {
-        ContentView().modelContainer(for: [Day.self, Profile.self, FoundationFood.self, SurveyFood.self], inMemory: true)
+        ContentView().modelContainer(for: [Day.self, Profile.self, StoredFood.self], inMemory: true)
     }
 }
