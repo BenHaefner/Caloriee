@@ -30,7 +30,7 @@ struct SelectableFoodView: View {
         searchTask = Task {
             do {
                 if (searchText.isEmpty) {
-                    await MainActor.run { foodSearchResults = [] }
+                    foodSearchResults = []
                 } else {
                     foodSearchResults = try foods.filter(#Predicate {$0.name.localizedStandardContains(searchText)})
                 }
