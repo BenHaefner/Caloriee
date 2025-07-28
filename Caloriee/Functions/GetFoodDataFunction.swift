@@ -8,8 +8,10 @@ import SwiftData
 import Foundation
 
 public func getFoodData(search: String, context: ModelContext) async throws -> [StoredFood] {
-    let searchedFoods = try context.fetch(FetchDescriptor<StoredFood>(predicate: #Predicate {
+    var descriptor = FetchDescriptor<StoredFood>(predicate: #Predicate {
         $0.name.localizedStandardContains(search)
-    }))
+    })
+    descriptor.fetchLimit = 10
+    let searchedFoods = try context.fetch(descriptor)
     return searchedFoods
 }
