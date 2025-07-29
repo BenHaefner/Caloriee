@@ -25,7 +25,7 @@ struct GeneratePopoverView: View {
                 } label: {
                     Image(systemName: "multiply")
                 }
-                .buttonStyle(.bordered)
+                    .buttonStyle(.bordered)
                 Spacer()
             }
             if !(generatingFood) {
@@ -43,9 +43,11 @@ struct GeneratePopoverView: View {
                         TextEditor(text: $generatedFoodItemDescription)
                             .padding()
                     }
-                    .scrollContentBackground(.hidden)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(20)
+                        .scrollContentBackground(.hidden)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.blue, lineWidth: 2)
+                        )
 
                     Button {
                         generatingFood = true
@@ -55,10 +57,10 @@ struct GeneratePopoverView: View {
                             Image(systemName: "sparkles")
                             Text("Generate")
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding()
+                            .frame(maxWidth: .infinity)
+                            .padding()
                     }
-                    .buttonStyle(.glassProminent)
+                        .buttonStyle(.glassProminent)
 
                 }
             } else {
@@ -72,11 +74,11 @@ struct GeneratePopoverView: View {
                         }
                     Spacer()
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .padding()
-        .presentationDetents([.medium])
+            .padding()
+            .presentationDetents([.medium])
     }
 
     private func generateFoodItem() async {
@@ -89,8 +91,9 @@ struct GeneratePopoverView: View {
                     the calories in a user provided food item. You will be inaccurate
                     without at least first searching the database. AFTER digesting the output of the tool
                     then determine if the output is useful.. If it is, then use it to determine the calories
-                    in the desired food. If you get a lot of useful data, pick the one that seems the most
-                    average. Otherwise, determine the calories yourself through your own means.
+                    in the desired food. If you get a lot of useful data, determine if any of them seem to be the 
+                    food item the user is requesting, and  pick the one that seems the most
+                    average. Otherwise if none seem to match the requested item, determine the calories yourself through your own means.
                     ALWAYS assume The input item will be a legitimate food that they just want to get the
                     calories for. Even if it seems silly or like a joke food item, ALWAY return the calories in an item.
                     """

@@ -13,6 +13,7 @@ struct DayView: View {
     @Bindable var user: Profile
     @Bindable var day: Day
     @State private var addingFood = false
+    @State private var editingGoal = false
     @State private var newFoodItem = FoodItem()
     @State private var selectingDate = false
     @State private var newAnyDate = Date()
@@ -114,12 +115,17 @@ struct DayView: View {
                         .padding()
                         .presentationDetents([.medium])
                     }
-                Button {
-                    print("edit user")
-                } label: {
-                    Image(systemName: "person")
-                }
-                
+                Button() {
+                      editingGoal = true;
+                  } label: {
+                      Image(systemName: "person")
+                  }
+                      .sheet(isPresented: $editingGoal) {
+                          NavigationView {
+                              UserProfileView(isEdit: false)
+                          }
+                      }
+
             })
         }
     }
