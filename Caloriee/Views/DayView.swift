@@ -118,11 +118,15 @@ struct DayView: View {
                 Button() {
                       editingGoal = true;
                   } label: {
-                      Image(systemName: "person")
+                      Image(systemName: "sparkle.text.clipboard")
                   }
                       .sheet(isPresented: $editingGoal) {
                           NavigationView {
-                              UserProfileView(isEdit: false)
+                              GoalSettingView(isEdit: true, onSet: { newGoal in
+                                  user.calorieGoal = newGoal
+                                  print (user.calorieGoal.description)
+                                  editingGoal = false
+                              })
                           }
                       }
 

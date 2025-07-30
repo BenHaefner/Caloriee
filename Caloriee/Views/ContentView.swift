@@ -13,13 +13,20 @@ struct ContentView: View {
     @State var user: Profile?
     @State var day: Day?
     @State var initializeTask: String = ""
-    
+    @State var goal: Int?
+    @State var settingGoal: Bool = false
+
     var body: some View {
         if (user != nil || day != nil) {
             DayView(user: user!, day: day!, onChangeDate: { date in
                 Task {
                     await reinitDate(for: date)
                 }
+            })
+        } else if (settingGoal) {
+            GoalSettingView(isEdit: false, onSet: { newGoal in
+                self.goal = newGoal
+                self.settingGoal = false
             })
         } else {
             VStack {
@@ -40,8 +47,12 @@ struct ContentView: View {
             if (profile != nil) {
                 self.user = profile!
             } else {
+                if (goal == nil) {
+                    settingGoal = true
+                    return
+                }
                 // TODO: Have the user set a goal when they first access the app
-                self.user = Profile(calorieGoal: 2200)
+                self.user = Profile(calorieGoal: goal!)
                 context.insert(self.user!)
                 try context.save()
             }

@@ -21,7 +21,8 @@ struct FoodDetailView: View {
     private var model = SystemLanguageModel.default
 
     init(foodItem: Binding<FoodItem>, creating: Bool, day: Day) {
-        editableFoodItem = EditableFoodItem(foodItem: foodItem.wrappedValue)
+        editableFoodItem = EditableFoodItem(foodItem: foodItem.wrappedValue) // TODO: Getting Fatal error index out of range on delete here.
+        // Need to redo navigation so we can fix that error
         self._foodItem = foodItem
         self.creating = creating
         self.editing = creating
