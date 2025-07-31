@@ -14,7 +14,7 @@ struct FoodView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text(foodItem.name)
                     .fontWeight(.bold)
-                
+
                 if !foodItem.comment.isEmpty {
                     Text(foodItem.comment)
                         .font(.caption2)
@@ -22,9 +22,9 @@ struct FoodView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            
+
             Spacer()
-            
+
             Text(foodItem.calorieCost.description)
         }
         .padding()

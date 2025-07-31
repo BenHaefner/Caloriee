@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftData
 
 @Model()
-final class Day: Identifiable {
+final class Day: Identifiable, Hashable {
     var id = UUID()
     var date: Date
     var foodItems: [FoodItem]

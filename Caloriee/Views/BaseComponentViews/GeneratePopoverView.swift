@@ -5,9 +5,9 @@
 //  Created by Ben Haefner on 7/24/25.
 //
 
-import SwiftUI
 import FoundationModels
 import Playgrounds
+import SwiftUI
 
 struct GeneratePopoverView: View {
     @Environment(\.modelContext) private var context
@@ -16,20 +16,20 @@ struct GeneratePopoverView: View {
     @State var generatingFood: Bool = false
     @State var failedGeneration: Bool = false
     var onGenerated: (EditableFoodItem) -> Void
-    
+
     var body: some View {
-        VStack (alignment: .leading){
+        VStack(alignment: .leading) {
             HStack {
                 Button {
                     dismiss()
                 } label: {
                     Image(systemName: "multiply")
                 }
-                    .buttonStyle(.bordered)
+                .buttonStyle(.bordered)
                 Spacer()
             }
             if !(generatingFood) {
-                if (failedGeneration) {
+                if failedGeneration {
                     Spacer()
                     Text("There was an error while generating your food item. Please try again later.")
                         .font(.headline)
@@ -43,28 +43,28 @@ struct GeneratePopoverView: View {
                         TextEditor(text: $generatedFoodItemDescription)
                             .padding()
                     }
-                        .scrollContentBackground(.hidden)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.blue, lineWidth: 2)
-                        )
+                    .scrollContentBackground(.hidden)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.blue, lineWidth: 2)
+                    )
 
                     Button {
                         generatingFood = true
-                        
+
                     } label: {
                         HStack {
                             Image(systemName: "sparkles")
                             Text("Generate")
                         }
-                            .frame(maxWidth: .infinity)
-                            .padding()
+                        .frame(maxWidth: .infinity)
+                        .padding()
                     }
-                        .buttonStyle(.glassProminent)
+                    .buttonStyle(.glassProminent)
 
                 }
             } else {
-                VStack (alignment: .center) {
+                VStack(alignment: .center) {
                     Spacer()
                     Text("Estimating...")
                     ProgressView()
@@ -74,11 +74,11 @@ struct GeneratePopoverView: View {
                         }
                     Spacer()
                 }
-                    .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-            .padding()
-            .presentationDetents([.medium])
+        .padding()
+        .presentationDetents([.medium])
     }
 
     private func generateFoodItem() async {
@@ -97,14 +97,17 @@ struct GeneratePopoverView: View {
                     ALWAYS assume The input item will be a legitimate food that they just want to get the
                     calories for. Even if it seems silly or like a joke food item, ALWAY return the calories in an item.
                     """
-                let session = LanguageModelSession(tools: [IntelligentSearchTool(context: context)], instructions: instructions)
+                let session = LanguageModelSession(
+                    tools: [IntelligentSearchTool(context: context)], instructions: instructions)
                 let prompt = "\(generatedFoodItemDescription)"
-                let response = try await session.respond(to: prompt, generating: EditableFoodItem.self, options: GenerationOptions(sampling: .greedy))
+                let response = try await session.respond(
+                    to: prompt, generating: EditableFoodItem.self,
+                    options: GenerationOptions(sampling: .greedy))
                 onGenerated(response.content)
                 dismiss()
                 break
             } catch {
-                if (i == 2) {
+                if i == 2 {
                     generatingFood = false
                     failedGeneration = true
                 }

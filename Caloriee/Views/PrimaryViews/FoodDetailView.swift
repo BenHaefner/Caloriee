@@ -5,8 +5,8 @@
 //  Created by Ben Haefner on 7/9/25.
 //
 
-import SwiftUI
 import FoundationModels
+import SwiftUI
 
 struct FoodDetailView: View {
     @Environment(\.modelContext) private var context
@@ -19,9 +19,9 @@ struct FoodDetailView: View {
     @Bindable var day: Day
     var creating: Bool
     private var model = SystemLanguageModel.default
-
+    
     init(foodItem: FoodItem, creating: Bool, day: Day) {
-        editableFoodItem = EditableFoodItem(foodItem: foodItem) // TODO: Getting Fatal error index out of range on delete here.
+        editableFoodItem = EditableFoodItem(foodItem: foodItem)  // TODO: Getting Fatal error index out of range on delete here.
         // Need to redo navigation so we can fix that error
         self.foodItem = foodItem
         self.creating = creating
@@ -34,18 +34,22 @@ struct FoodDetailView: View {
             EditableRow(editing: editing, label: "Name", viewModeValue: foodItem.name) {
                 TextField("Name", text: $editableFoodItem.name)
             }
-            EditableRow(editing: editing, label: "Calories", viewModeValue: foodItem.calorieCost.description) {
-                TextField("Calorie Count", value: $editableFoodItem.calorieCost, formatter: NumberFormatter())
-                    .keyboardType(.numberPad) // TODO: Should i add a text mask?
+            EditableRow(
+                editing: editing, label: "Calories", viewModeValue: foodItem.calorieCost.description
+            ) {
+                TextField(
+                    "Calorie Count", value: $editableFoodItem.calorieCost, formatter: NumberFormatter()
+                )
+                .keyboardType(.numberPad)  // TODO: Should i add a text mask?
             }
-            if (editing) {
+            if editing {
                 Picker("Meal", selection: $editableFoodItem.mealType) {
                     ForEach(MealTypes.allCases) { mealType in
                         Text(mealType.name).tag(mealType)
                     }
                 }
                 .pickerStyle(.inline)
-                    .font(.headline)
+                .font(.headline)
             } else {
                 VStack(alignment: .leading) {
                     Text("Meal")
@@ -58,19 +62,19 @@ struct FoodDetailView: View {
                 Text("Description")
                     .font(.headline)
                 Spacer()
-                if (editing) {
+                if editing {
                     TextField("Description", text: $editableFoodItem.comment, axis: .vertical)
                 } else {
                     Text(foodItem.comment)
-
+                    
                 }
             }
         }
-        .toolbar{
+        .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
-                if(editing && model.availability == .available) {
+                if editing && model.availability == .available {
                     Button {
-                        if (!selecting) { generating = true }
+                        if !selecting { generating = true }
                     } label: {
                         Image(systemName: "sparkles")
                     }
@@ -84,10 +88,10 @@ struct FoodDetailView: View {
                         })
                     }
                 }
-
-                if (editing) {
+                
+                if editing {
                     Button {
-                        if (!generating) { selecting = true }
+                        if !generating { selecting = true }
                     } label: {
                         Image(systemName: "list.bullet")
                     }
@@ -100,16 +104,16 @@ struct FoodDetailView: View {
                         })
                     }
                 }
-
+                
                 Button {
-                    if (editing) {
+                    if editing {
                         editableFoodItem.copy(to: foodItem)
-                        if (creating) {
+                        if creating {
                             day.addFoodItem(foodItem)
                         }
                         dismiss()
                     }
-                    if (!creating) {
+                    if !creating {
                         editing.toggle()
                     }
                 } label: {
@@ -125,12 +129,12 @@ struct FoodDetailView: View {
         let label: String
         let viewModeValue: String
         let editableContent: () -> Content
-
+        
         var body: some View {
-            VStack (alignment: .leading) {
+            VStack(alignment: .leading) {
                 Text(label)
                     .font(.headline)
-                if (!editing) {
+                if !editing {
                     Text(viewModeValue)
                 } else {
                     editableContent()

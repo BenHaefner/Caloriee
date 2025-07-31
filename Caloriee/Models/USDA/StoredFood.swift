@@ -1,3 +1,4 @@
+import Foundation
 //
 //  StoredFoods.swift
 //  Caloriee
@@ -5,7 +6,6 @@
 //  Created by Ben Haefner on 7/27/25.
 //
 import SwiftData
-import Foundation
 
 @Model
 public class StoredFood {
@@ -14,14 +14,14 @@ public class StoredFood {
     public var calories: Int
     public var baseCalories: Int
     // Portions fixed to 100 gms by default it seems
-    public var portionWeight: Double? // TODO: Do i need to do portion size? Peanut butter being like 700 cal seems off
+    public var portionWeight: Double?  // TODO: Do i need to do portion size? Peanut butter being like 700 cal seems off
     public var usdaId: Int
     public var udsaSource: String
-    
+
     init(name: String, calories: Int, portionWeight: Double?, usdaId: Int, udsaSource: String) {
         self.name = name
-        if (portionWeight != nil) {
-            self.calories = Int(Double(calories) * (portionWeight!/100.0))
+        if portionWeight != nil {
+            self.calories = Int(Double(calories) * (portionWeight! / 100.0))
         } else {
             self.calories = calories
         }

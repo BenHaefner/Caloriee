@@ -5,8 +5,8 @@
 //  Created by Ben Haefner on 7/27/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct SelectableFoodView: View {
     @Environment(\.modelContext) private var context
@@ -16,7 +16,7 @@ struct SelectableFoodView: View {
     @State var searchTask: Task<Void, Never>? = nil
     @State var selected: StoredFood?
     var onSelected: (StoredFood) -> Void
-
+    
     // I dont love bringing this into memory but there seems to be
     // some thread safety issues swift data isnt great at handling
     // and this was a suggestion. It also should help with performance
@@ -25,23 +25,24 @@ struct SelectableFoodView: View {
     @Query()
     private var foods: [StoredFood]
     
-    private func getFoodSearchResults() async throws -> Void {
+    private func getFoodSearchResults() async throws {
         searchTask?.cancel()
         searchTask = Task {
             do {
-                if (searchText.isEmpty) {
+                if searchText.isEmpty {
                     foodSearchResults = []
                 } else {
-                    foodSearchResults = try foods.filter(#Predicate {$0.name.localizedStandardContains(searchText)})
+                    foodSearchResults = try foods.filter(
+                        #Predicate{ $0.name.localizedStandardContains(searchText) })
                 }
             } catch {
                 print(error)
             }
         }
     }
-
+    
     var body: some View {
-        VStack (alignment: .center){
+        VStack(alignment: .center) {
             HStack {
                 Button {
                     dismiss()
@@ -51,7 +52,7 @@ struct SelectableFoodView: View {
                 .buttonStyle(.bordered)
                 Spacer()
                 Button {
-                    if (selected != nil) {
+                    if selected != nil {
                         onSelected(selected!)
                         dismiss()
                     } else {
@@ -64,12 +65,12 @@ struct SelectableFoodView: View {
                 
             }
             Spacer()
-            if (foodSearchResults.isEmpty) {
+            if foodSearchResults.isEmpty {
                 Text("No foods found")
                 Spacer()
             } else {
                 NavigationStack {
-                    List (foodSearchResults, id: \.self, selection: $selected) { result in
+                    List(foodSearchResults, id: \.self, selection: $selected) { result in
                         Text(result.name)
                     }
                 }

@@ -5,8 +5,8 @@
 //  Created by Ben Haefner on 7/8/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct CalorieeApp: App {
@@ -15,9 +15,9 @@ struct CalorieeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }.modelContainer(sharedCalorieeContainer) // TODO: Look into where this needs to go
+        }.modelContainer(sharedCalorieeContainer)  // TODO: Look into where this needs to go
     }
-    
+
     static private func calorieeContainer() -> ModelContainer {
         do {
             return try ModelContainer(for: Day.self, Profile.self, StoredFood.self)

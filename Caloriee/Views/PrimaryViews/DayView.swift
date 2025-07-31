@@ -5,8 +5,8 @@
 //  Created by Ben Haefner on 7/9/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct DayView: View {
     @Environment(\.modelContext) private var context
@@ -19,72 +19,79 @@ struct DayView: View {
     @State private var selectingDate = false
     @State private var newAnyDate = Date()
     var onChangeDate: (Date) -> Void
-
+    
     // TODO: Split this bitch up into more views for readability
     var body: some View {
-        List{
-            Section(content: {
-                VStack(alignment: .leading) {
-                    ProgressArcView(caloriesConsumed: day.caloriesConsumed, calorieGoal: user.calorieGoal)
-                        .frame(maxWidth:.infinity)
-                }
-            }, header: {
-                Text(day.date.formatted(date: .abbreviated, time: .omitted))
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-            })
+        List {
+            Section(
+                content: {
+                    VStack(alignment: .leading) {
+                        ProgressArcView(caloriesConsumed: day.caloriesConsumed, calorieGoal: user.calorieGoal)
+                            .frame(maxWidth: .infinity)
+                    }
+                },
+                header: {
+                    Text(day.date.formatted(date: .abbreviated, time: .omitted))
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                })
             ForEach(MealTypes.allCases) { mealType in
                 if day.foodItems.contains(where: { $0.mealType == mealType }) {
-                    Section(content: {
-                        ForEach($day.foodItems.filter{ $0.mealType.wrappedValue == mealType }) { $foodItem in
-                            NavigationLink(value: FoodDetailNavigation(foodItem: foodItem, creating: false, day: day)) {
-                                FoodView(foodItem: foodItem)
-                            }
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    day.deleteFoodItem(foodItem)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+                    Section(
+                        content: {
+                            ForEach($day.foodItems.filter { $0.mealType.wrappedValue == mealType }) { $foodItem in
+                                NavigationLink(
+                                    value: FoodDetailNavigation(foodItem: foodItem, creating: false, day: day)
+                                ) {
+                                    FoodView(foodItem: foodItem)
+                                }
+                                .swipeActions {
+                                    Button(role: .destructive) {
+                                        day.deleteFoodItem(foodItem)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
                                 }
                             }
-                        }
-                    },
-                    header: {
-                        Text(mealType.name)
-                            .font(.callout)
-                            .foregroundColor(.secondary)
-                            .fontWeight(.bold)
-                    })
+                        },
+                        header: {
+                            Text(mealType.name)
+                                .font(.callout)
+                                .foregroundColor(.secondary)
+                                .fontWeight(.bold)
+                        })
                 }
             }
         }
-        .toolbar{
-            ToolbarItemGroup(placement: .bottomBar, content: {
-                Button {
-                    let newDate = Calendar.current.date(byAdding: .day, value: -1, to: day.date)
-                    onChangeDate(newDate!)
-                } label: {
-                    Image(systemName: "chevron.backward")
-                }
-                Button {
-                    let newDate = Calendar.current.date(byAdding: .day, value: 1, to: day.date)
-                    onChangeDate(newDate!)
-                } label: {
-                    Image(systemName: "chevron.forward")
-                }
-                Button() {
-                    stackPath.append(FoodDetailNavigation(foodItem: newFoodItem, creating: true, day: day))
-                    newFoodItem = FoodItem()
-                } label: {
-                    Image(systemName: "plus.square")
-                }
-
-                Button {
-                    selectingDate = true
-                } label: {
-                    Image(systemName: "calendar")
-                }
+        .toolbar {
+            ToolbarItemGroup(
+                placement: .bottomBar,
+                content: {
+                    Button {
+                        let newDate = Calendar.current.date(byAdding: .day, value: -1, to: day.date)
+                        onChangeDate(newDate!)
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                    }
+                    Button {
+                        let newDate = Calendar.current.date(byAdding: .day, value: 1, to: day.date)
+                        onChangeDate(newDate!)
+                    } label: {
+                        Image(systemName: "chevron.forward")
+                    }
+                    Button {
+                        stackPath.append(FoodDetailNavigation(foodItem: newFoodItem, creating: true, day: day))
+                        newFoodItem = FoodItem()
+                    } label: {
+                        Image(systemName: "plus.square")
+                    }
+                    
+                    Button {
+                        selectingDate = true
+                    } label: {
+                        Image(systemName: "calendar")
+                    }
                     .popover(isPresented: $selectingDate) {
                         VStack {
                             HStack {
@@ -93,7 +100,7 @@ struct DayView: View {
                                 } label: {
                                     Image(systemName: "multiply")
                                 }
-                                    .buttonStyle(.bordered)
+                                .buttonStyle(.bordered)
                                 Spacer()
                                 Button {
                                     selectingDate = false
@@ -101,7 +108,7 @@ struct DayView: View {
                                 } label: {
                                     Image(systemName: "checkmark")
                                 }
-                                    .buttonStyle(.glassProminent)
+                                .buttonStyle(.glassProminent)
                             }
                             DatePicker("Selected Date", selection: $newAnyDate, displayedComponents: [.date])
                                 .datePickerStyle(.graphical)
@@ -109,20 +116,22 @@ struct DayView: View {
                         .padding()
                         .presentationDetents([.medium])
                     }
-                Button() {
-                      editingGoal = true;
-                  } label: {
-                      Image(systemName: "sparkle.text.clipboard")
-                  }
-                      .sheet(isPresented: $editingGoal) {
-                          GoalSettingView(isEdit: true, onSet: { newGoal in
-                              user.calorieGoal = newGoal
-                              print (user.calorieGoal.description)
-                              editingGoal = false
-                          })
-                      }
-
-            })
+                    Button {
+                        editingGoal = true
+                    } label: {
+                        Image(systemName: "sparkle.text.clipboard")
+                    }
+                    .sheet(isPresented: $editingGoal) {
+                        GoalSettingView(
+                            isEdit: true,
+                            onSet: { newGoal in
+                                user.calorieGoal = newGoal
+                                print(user.calorieGoal.description)
+                                editingGoal = false
+                            })
+                    }
+                    
+                })
         }
     }
 }
