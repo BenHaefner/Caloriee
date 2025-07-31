@@ -15,27 +15,34 @@ struct ContentView: View {
     @State var initializeTask: String = ""
     @State var goal: Int?
     @State var settingGoal: Bool = false
-
+    @State var stackPath: [FoodDetailNavigation] = []
     var body: some View {
-        if (user != nil || day != nil) {
-            DayView(user: user!, day: day!, onChangeDate: { date in
-                Task {
-                    await reinitDate(for: date)
-                }
-            })
-        } else if (settingGoal) {
-            GoalSettingView(isEdit: false, onSet: { newGoal in
-                self.goal = newGoal
-                self.settingGoal = false
-            })
-        } else {
+        NavigationStack(path: $stackPath) {
             VStack {
-                Text(initializeTask)
-                ProgressView()
-                    .task {
-                        await initializeData()
+                if (user != nil || day != nil) {
+                    DayView(user: user!, day: day!, stackPath: $stackPath, onChangeDate: { date in
+                        Task {
+                            await reinitDate(for: date)
+                        }
+                    })
+                } else if (settingGoal) {
+                    GoalSettingView(isEdit: false, onSet: { newGoal in
+                        self.goal = newGoal
+                        self.settingGoal = false
+                    })
+                } else {
+                    VStack {
+                        Text(initializeTask)
+                        ProgressView()
+                            .task {
+                                await initializeData()
+                            }
                     }
+                }
             }
+            .navigationDestination(for: FoodDetailNavigation.self, destination: { foodDetailNav in
+                FoodDetailView(foodItem: foodDetailNav.foodItem, creating: foodDetailNav.creating, day: foodDetailNav.day)
+            })
         }
     }
     
@@ -127,11 +134,5 @@ struct ContentView: View {
         } catch {
             fatalError("Error retrieving new date: \(error)")
         }
-    }
-}
-
-#Preview {
-    NavigationView {
-        ContentView().modelContainer(for: [Day.self, Profile.self, StoredFood.self], inMemory: true)
     }
 }

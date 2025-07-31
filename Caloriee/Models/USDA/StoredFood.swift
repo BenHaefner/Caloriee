@@ -14,7 +14,7 @@ public class StoredFood {
     public var calories: Int
     public var baseCalories: Int
     // Portions fixed to 100 gms by default it seems
-    public var portionWeight: Double?
+    public var portionWeight: Double? // TODO: Do i need to do portion size? Peanut butter being like 700 cal seems off
     public var usdaId: Int
     public var udsaSource: String
     

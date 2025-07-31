@@ -12,6 +12,7 @@ struct DayView: View {
     @Environment(\.modelContext) private var context
     @Bindable var user: Profile
     @Bindable var day: Day
+    @Binding var stackPath: [FoodDetailNavigation]
     @State private var addingFood = false
     @State private var editingGoal = false
     @State private var newFoodItem = FoodItem()
@@ -37,9 +38,7 @@ struct DayView: View {
                 if day.foodItems.contains(where: { $0.mealType == mealType }) {
                     Section(content: {
                         ForEach($day.foodItems.filter{ $0.mealType.wrappedValue == mealType }) { $foodItem in
-                            NavigationLink {
-                                FoodDetailView(foodItem: $foodItem, creating: false, day: day)
-                            } label: {
+                            NavigationLink(value: FoodDetailNavigation(foodItem: foodItem, creating: false, day: day)) {
                                 FoodView(foodItem: foodItem)
                             }
                             .swipeActions {
@@ -74,18 +73,13 @@ struct DayView: View {
                 } label: {
                     Image(systemName: "chevron.forward")
                 }
-              Button() {
-                    addingFood = true;
+                Button() {
+                    stackPath.append(FoodDetailNavigation(foodItem: newFoodItem, creating: true, day: day))
+                    newFoodItem = FoodItem()
                 } label: {
                     Image(systemName: "plus.square")
                 }
-                    .sheet(isPresented: $addingFood, onDismiss: {
-                        newFoodItem = FoodItem();
-                    }) {
-                        NavigationView {
-                            FoodDetailView(foodItem: $newFoodItem, creating: true, day: day)
-                        }
-                    }
+
                 Button {
                     selectingDate = true
                 } label: {
@@ -121,34 +115,14 @@ struct DayView: View {
                       Image(systemName: "sparkle.text.clipboard")
                   }
                       .sheet(isPresented: $editingGoal) {
-                          NavigationView {
-                              GoalSettingView(isEdit: true, onSet: { newGoal in
-                                  user.calorieGoal = newGoal
-                                  print (user.calorieGoal.description)
-                                  editingGoal = false
-                              })
-                          }
+                          GoalSettingView(isEdit: true, onSet: { newGoal in
+                              user.calorieGoal = newGoal
+                              print (user.calorieGoal.description)
+                              editingGoal = false
+                          })
                       }
 
             })
         }
-    }
-}
-
-#Preview {
-    NavigationView {
-        DayView(
-            user: Profile(calorieGoal: 2200),
-            day: Day(
-                date: Date.now,
-                foodItems: [
-                    FoodItem(calorieCost: 240, name: "Hot Chocolate", comment: "A refreshing cup!", mealType: MealTypes.breakfast),
-                    FoodItem(calorieCost: 500, name: "Bee Bites", comment: "I dont know but I like it...", mealType: MealTypes.dinner),
-                    FoodItem(calorieCost: 200, name: "Rice", comment: "Simple and clean is the way that you're making me feel tonight. It's hard to let it go. When you walk away, you dont hear me say \"please baby dont go.\"", mealType: MealTypes.snacks)
-                ]
-            ), onChangeDate: { date in
-                print(date.description)
-            }
-        )
     }
 }

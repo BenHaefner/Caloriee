@@ -11,7 +11,7 @@ import FoundationModels
 struct FoodDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) var dismiss
-    @Binding var foodItem: FoodItem
+    @State var foodItem: FoodItem
     @State var editing: Bool
     @State var editableFoodItem: EditableFoodItem
     @State var generating: Bool = false
@@ -20,10 +20,10 @@ struct FoodDetailView: View {
     var creating: Bool
     private var model = SystemLanguageModel.default
 
-    init(foodItem: Binding<FoodItem>, creating: Bool, day: Day) {
-        editableFoodItem = EditableFoodItem(foodItem: foodItem.wrappedValue) // TODO: Getting Fatal error index out of range on delete here.
+    init(foodItem: FoodItem, creating: Bool, day: Day) {
+        editableFoodItem = EditableFoodItem(foodItem: foodItem) // TODO: Getting Fatal error index out of range on delete here.
         // Need to redo navigation so we can fix that error
-        self._foodItem = foodItem
+        self.foodItem = foodItem
         self.creating = creating
         self.editing = creating
         self.day = day
@@ -116,15 +116,6 @@ struct FoodDetailView: View {
                     Image(systemName: editing ? "checkmark" : "square.and.pencil")
                 }
                 .buttonStyle(.glassProminent)
-            }
-            ToolbarItem(placement: .cancellationAction) {
-                if (creating) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "multiply")
-                    }
-                }
             }
         }
     }

@@ -14,9 +14,7 @@ struct CalorieeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                ContentView()
-            }
+            ContentView()
         }.modelContainer(sharedCalorieeContainer) // TODO: Look into where this needs to go
     }
     
