@@ -13,28 +13,32 @@ struct FoodIterationView: View {
     var onFoodItemDelete: (FoodItem) -> Void
 
     var body: some View {
-        Section(
-            content: {
-                ForEach(foodItems) { foodItem in
-                    NavigationLink(
-                        value: FoodDetailNavigation(foodItem: foodItem, creating: false, day: day)
-                    ) {
-                        FoodView(foodItem: foodItem)
-                    }
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            onFoodItemDelete(foodItem)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+        ForEach(MealTypes.allCases) { mealType in
+            if foodItems.contains(where: { $0.mealType == mealType }) {
+                Section(
+                    content: {
+                        ForEach(foodItems.filter{ $0.mealType == mealType}) { foodItem in
+                            NavigationLink(
+                                value: FoodDetailNavigation(foodItem: foodItem, creating: false, day: day)
+                            ) {
+                                FoodView(foodItem: foodItem)
+                            }
+                            .swipeActions {
+                                Button(role: .destructive) {
+                                    onFoodItemDelete(foodItem)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                         }
-                    }
-                }
-            },
-            header: {
-                Text("Foods") // TODO: Break out to meals
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-                    .fontWeight(.bold)
-            })
+                    },
+                    header: {
+                        Text(mealType.name)
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+                            .fontWeight(.bold)
+                    })
+            }
+        }
     }
 }
