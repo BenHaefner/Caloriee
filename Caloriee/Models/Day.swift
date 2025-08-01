@@ -11,24 +11,9 @@ import SwiftData
 final class Day: Identifiable, Hashable {
     var id = UUID()
     var date: Date
-    var foodItems: [FoodItem]
-    
-    var caloriesConsumed: Int {
-        self.foodItems.reduce(0) {$0 + $1.calorieCost}
-    }
-    
-    init(date: Date, foodItems: [FoodItem] = []) {
-        self.date = date
-        self.foodItems = foodItems
-    }
-    
-    func deleteFoodItem(_ deletedItem: FoodItem) {
-        foodItems.removeAll(where: {$0.id == deletedItem.id})
-    }
-    
-    func addFoodItem(_ newFoodItem: FoodItem) {
-        foodItems.append(newFoodItem)
-    }
 
+    init(date: Date) {
+        self.date = date
+    }
 }
 

@@ -1,10 +1,10 @@
-import Foundation
 //
 //  GetFoodDataFunction.swift
 //  Caloriee
 //
 //  Created by Ben Haefner on 7/27/25.
 //
+import Foundation
 import SwiftData
 
 public func getFoodData(search: String, context: ModelContext) async throws -> [StoredFood] {

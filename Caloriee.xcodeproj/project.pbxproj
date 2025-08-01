@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3150BE4C2E3C31E9008960C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3150BE452E3C317C008960C7 /* Foundation.framework */; };
+		3150BE4F2E3C31EB008960C7 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3150BE3C2E3C30D7008960C7 /* FoundationModels.framework */; };
+		3150BE512E3C31EC008960C7 /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3150BE432E3C3172008960C7 /* SwiftData.framework */; };
+		3150BE532E3C31ED008960C7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3150BE412E3C316A008960C7 /* SwiftUI.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3164D0F62E1DD02E003989DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +31,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3150BE3C2E3C30D7008960C7 /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
+		3150BE412E3C316A008960C7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		3150BE432E3C3172008960C7 /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
+		3150BE452E3C317C008960C7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3164D0E82E1DD02C003989DB /* Caloriee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Caloriee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3164D0F52E1DD02E003989DB /* CalorieeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalorieeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3164D0FF2E1DD02E003989DB /* CalorieeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalorieeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +76,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3150BE4C2E3C31E9008960C7 /* Foundation.framework in Frameworks */,
+				3150BE532E3C31ED008960C7 /* SwiftUI.framework in Frameworks */,
+				3150BE512E3C31EC008960C7 /* SwiftData.framework in Frameworks */,
+				3150BE4F2E3C31EB008960C7 /* FoundationModels.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,12 +100,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3150BE3B2E3C30D6008960C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3150BE452E3C317C008960C7 /* Foundation.framework */,
+				3150BE432E3C3172008960C7 /* SwiftData.framework */,
+				3150BE412E3C316A008960C7 /* SwiftUI.framework */,
+				3150BE3C2E3C30D7008960C7 /* FoundationModels.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3164D0DF2E1DD02C003989DB = {
 			isa = PBXGroup;
 			children = (
 				3164D0EA2E1DD02C003989DB /* Caloriee */,
 				3164D0F82E1DD02E003989DB /* CalorieeTests */,
 				3164D1022E1DD02E003989DB /* CalorieeUITests */,
+				3150BE3B2E3C30D6008960C7 /* Frameworks */,
 				3164D0E92E1DD02C003989DB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -409,6 +436,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7ZW77JRNHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Caloriee/Info.plist;
@@ -445,6 +473,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7ZW77JRNHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Caloriee/Info.plist;

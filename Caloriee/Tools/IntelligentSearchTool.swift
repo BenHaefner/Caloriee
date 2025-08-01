@@ -28,7 +28,7 @@ struct IntelligentSearchTool: Tool {
         var searchTerm: String
     }
 
-    func call(arguments: Arguments) async throws -> ToolOutput {
+    func call(arguments: Arguments) async throws -> String {
         let Foods = try await getFoodData(search: arguments.searchTerm, context: context)
         let mappedFoods = Foods.map { "\($0.name) - \($0.calories) cal" }.joined(separator: "\n")
         let returnableOptions = """
@@ -36,6 +36,6 @@ struct IntelligentSearchTool: Tool {
           may match the intended food item information \(mappedFoods)
       """
         print(returnableOptions)
-        return ToolOutput(returnableOptions)
+        return returnableOptions
     }
 }

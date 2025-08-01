@@ -20,7 +20,7 @@ struct CalorieeApp: App {
 
     static private func calorieeContainer() -> ModelContainer {
         do {
-            return try ModelContainer(for: Day.self, Profile.self, StoredFood.self)
+            return try ModelContainer(for: Day.self, FoodItem.self, Profile.self, StoredFood.self)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

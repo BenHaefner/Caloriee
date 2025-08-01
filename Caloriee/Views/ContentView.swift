@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var context
     @State var user: Profile?
     @State var day: Day?
+    @State var foodItems: [FoodItem]?
     @State var initializeTask: String = ""
     @State var goal: Int?
     @State var settingGoal: Bool = false
@@ -19,14 +20,18 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $stackPath) {
             VStack {
-                if user != nil || day != nil {
+                if user != nil && day != nil && foodItems != nil {
                     DayView(
-                        user: user!, day: day!, stackPath: $stackPath,
+                        user: user!,
+                        day: day!,
+                        foodItems: Binding(get: { foodItems ?? [] }, set: { foodItems = $0 }),
+                        stackPath: $stackPath,
                         onChangeDate: { date in
                             Task {
                                 await reinitDate(for: date)
                             }
-                        })
+                        },
+                        getFoodItemDataForDay: initFoodForDay)
                 } else if settingGoal {
                     GoalSettingView(
                         isEdit: false,
@@ -48,8 +53,11 @@ struct ContentView: View {
                 for: FoodDetailNavigation.self,
                 destination: { foodDetailNav in
                     FoodDetailView(
-                        foodItem: foodDetailNav.foodItem, creating: foodDetailNav.creating,
-                        day: foodDetailNav.day)
+                        foodItem: foodDetailNav.foodItem,
+                        creating: foodDetailNav.creating,
+                        day: foodDetailNav.day,
+                        predismiss: initFoodForDay
+                    )
                 })
         }
     }
@@ -73,18 +81,7 @@ struct ContentView: View {
 
             initializeTask = "Initializing day..."
             let today = Calendar.current.startOfDay(for: Date())
-            let days = try context.fetch(
-                FetchDescriptor<Day>(
-                    predicate: #Predicate{ $0.date == today }
-                ))
-            let day = days.first
-            if day != nil {
-                self.day = day!
-            } else {
-                self.day = Day(date: today, foodItems: [])
-                context.insert(self.day!)
-                try context.save()
-            }
+            await reinitDate(for: today)
 
             initializeTask = "Initializing food database..."
             var foods = FetchDescriptor<StoredFood>()
@@ -135,15 +132,15 @@ struct ContentView: View {
                             udsaSource: "Survey")
                     }
                     for food in persistableFoods {
-            context.insert(food)
-          }
-          try context.save()
+                        context.insert(food)
+                    }
+                    try context.save()
+                }
+            }
+        } catch {
+            fatalError("Error retrieving initial data: \(error)")
         }
-      }
-    } catch {
-      fatalError("Error retrieving initial data: \(error)")
     }
-  }
 
     private func reinitDate(for date: Date) async {
         do {
@@ -156,12 +153,27 @@ struct ContentView: View {
             if day != nil {
                 self.day = day!
             } else {
-                self.day = Day(date: date, foodItems: [])
+                self.day = Day(date: date)
                 context.insert(self.day!)
                 try context.save()
             }
+            initFoodForDay()
         } catch {
             fatalError("Error retrieving new date: \(error)")
         }
     }
+
+    private func initFoodForDay() {
+        do {
+            let dayId = day!.id
+            self.foodItems = try context.fetch(FetchDescriptor<FoodItem>(
+                predicate: #Predicate {
+                    $0.dayId == dayId
+                }
+            ))
+        } catch {
+            fatalError("Error retrieving food data for day: \(error)")
+        }
+    }
 }
+
