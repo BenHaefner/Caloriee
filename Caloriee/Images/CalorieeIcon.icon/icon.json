@@ -2,7 +2,7 @@
   "fill" : {
     "linear-gradient" : [
       "srgb:0.16471,0.61569,0.68627,1.00000",
-      "display-p3:0.44670,0.58935,0.66746,1.00000"
+      "display-p3:0.44706,0.58824,0.66667,1.00000"
     ]
   },
   "groups" : [
@@ -28,7 +28,7 @@
               }
             }
           ],
-          "glass" : true,
+          "glass" : false,
           "hidden" : false,
           "image-name" : "Caloriee.png",
           "name" : "Caloriee",
@@ -54,8 +54,9 @@
         "kind" : "neutral",
         "opacity" : 0.5
       },
+      "specular" : false,
       "translucency" : {
-        "enabled" : true,
+        "enabled" : false,
         "value" : 0.5
       }
     }

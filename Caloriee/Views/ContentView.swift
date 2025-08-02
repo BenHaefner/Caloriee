@@ -43,7 +43,6 @@ struct ContentView: View {
                     VStack {
                         Text("Doing some set up...")
                         ProgressView()
-                            .progressViewStyle(HeartSymbolProgressViewStyle())
                             .task {
                                 await initializeData()
                             }

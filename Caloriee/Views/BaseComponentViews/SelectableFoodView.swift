@@ -24,7 +24,7 @@ struct SelectableFoodView: View {
     // circle back but right now i want to move on.
     @Query()
     private var foods: [StoredFood]
-    
+
     private func getFoodSearchResults() async throws {
         searchTask?.cancel()
         searchTask = Task {
@@ -32,8 +32,8 @@ struct SelectableFoodView: View {
                 if searchText.isEmpty {
                     foodSearchResults = []
                 } else {
-                    foodSearchResults = try foods.filter(
-                        #Predicate{ $0.name.localizedStandardContains(searchText) })
+                    foodSearchResults = try foods
+                        .filter(#Predicate { $0.name.localizedStandardContains(searchText) })
                 }
             } catch {
                 print(error)
@@ -105,3 +105,4 @@ struct SelectableFoodView: View {
         .presentationDetents([.medium])
     }
 }
+

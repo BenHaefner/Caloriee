@@ -6,7 +6,6 @@
 //
 
 import FoundationModels
-import Playgrounds
 import SwiftUI
 
 struct GeneratePopoverView: View {

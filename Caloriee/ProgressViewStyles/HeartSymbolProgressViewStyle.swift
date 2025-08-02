@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+// TODO: This is not working
 struct HeartSymbolProgressViewStyle: ProgressViewStyle {
     @State private var drawnSymbol: Bool = true
 
