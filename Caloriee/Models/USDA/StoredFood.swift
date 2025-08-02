@@ -13,12 +13,13 @@ public class StoredFood {
     public var name: String
     public var calories: Int
     public var baseCalories: Int
+    public var portionName: String?
     // Portions fixed to 100 gms by default it seems
     public var portionWeight: Double?  // TODO: Do i need to do portion size? Peanut butter being like 700 cal seems off
     public var usdaId: Int
     public var udsaSource: String
 
-    init(name: String, calories: Int, portionWeight: Double?, usdaId: Int, udsaSource: String) {
+    init(name: String, calories: Int, portionName: String? = nil, portionWeight: Double?, usdaId: Int, udsaSource: String) {
         self.name = name
         if portionWeight != nil {
             self.calories = Int(Double(calories) * (portionWeight! / 100.0))
@@ -26,6 +27,7 @@ public class StoredFood {
             self.calories = calories
         }
         self.baseCalories = calories
+        self.portionName = portionName
         self.portionWeight = portionWeight
         self.usdaId = usdaId
         self.udsaSource = udsaSource

@@ -41,8 +41,9 @@ struct ContentView: View {
                         })
                 } else {
                     VStack {
-                        Text(initializeTask)
+                        Text("Doing some set up...")
                         ProgressView()
+                            .progressViewStyle(HeartSymbolProgressViewStyle())
                             .task {
                                 await initializeData()
                             }
@@ -64,7 +65,6 @@ struct ContentView: View {
 
     private func initializeData() async {
         do {
-            initializeTask = "Initializing profile..."
             let profiles = try context.fetch(FetchDescriptor<Profile>())
             let profile = profiles.first
             if profile != nil {
@@ -79,11 +79,9 @@ struct ContentView: View {
                 try context.save()
             }
 
-            initializeTask = "Initializing day..."
             let today = Calendar.current.startOfDay(for: Date())
             await reinitDate(for: today)
 
-            initializeTask = "Initializing food database..."
             var foods = FetchDescriptor<StoredFood>()
             foods.fetchLimit = 1
             let existingFoods = try context.fetch(foods)
@@ -99,13 +97,29 @@ struct ContentView: View {
                                 $0.nutrient.unitName == "kcal"
                             })
                         })
-                    let persistableFoods = filteredDecodedFoods.map {
-                        StoredFood(
-                            name: $0.description,
-                            calories: Int(
-                                ($0.foodNutrients.first(where: { $0.nutrient.unitName == "kcal" }))!.amount!),
-                            portionWeight: $0.foodPortions?.first?.gramWeight, usdaId: $0.fdcID,
-                            udsaSource: "FoundationFoods")
+                    var persistableFoods: [StoredFood] = []
+                    filteredDecodedFoods.forEach { filteredDecodedFood in
+                        if (filteredDecodedFood.foodPortions != nil && filteredDecodedFood.foodPortions!.count > 0) {
+                            filteredDecodedFood.foodPortions!.forEach { foodPortion in
+                                persistableFoods.append(StoredFood(
+                                    name: filteredDecodedFood.description,
+                                    calories: Int(
+                                        (filteredDecodedFood.foodNutrients.first(where: { $0.nutrient.unitName == "kcal" }))!.amount!),
+                                    portionName: "\(Int(foodPortion.amount).description) \(foodPortion.measureUnit.name)",
+                                    portionWeight: foodPortion.gramWeight,
+                                    usdaId: filteredDecodedFood.fdcID,
+                                    udsaSource: "FoundationFoods"))
+                            }
+                        } else {
+                            persistableFoods.append(StoredFood(
+                                name: filteredDecodedFood.description,
+                                calories: Int(
+                                    (filteredDecodedFood.foodNutrients.first(where: { $0.nutrient.unitName == "kcal" }))!.amount!),
+                                portionName: nil,
+                                portionWeight: nil,
+                                usdaId: filteredDecodedFood.fdcID,
+                                udsaSource: "FoundationFoods"))
+                        }
                     }
                     for food in persistableFoods {
                         context.insert(food)
@@ -123,13 +137,29 @@ struct ContentView: View {
                                 $0.nutrient.unitName == "kcal"
                             })
                         })
-                    let persistableFoods = filteredDecodedFoods.map {
-                        StoredFood(
-                            name: $0.description,
-                            calories: Int(
-                                ($0.foodNutrients.first(where: { $0.nutrient.unitName == "kcal" }))!.amount),
-                            portionWeight: $0.foodPortions.first?.gramWeight, usdaId: $0.fdcID,
-                            udsaSource: "Survey")
+                    var persistableFoods: [StoredFood] = []
+                    filteredDecodedFoods.forEach { filteredDecodedFood in
+                        if (filteredDecodedFood.foodPortions.count > 0) {
+                            filteredDecodedFood.foodPortions.forEach { foodPortion in
+                                persistableFoods.append(StoredFood(
+                                    name: filteredDecodedFood.description,
+                                    calories: Int(
+                                        (filteredDecodedFood.foodNutrients.first(where: { $0.nutrient.unitName == "kcal" }))!.amount),
+                                    portionName: foodPortion.portionDescription,
+                                    portionWeight: foodPortion.gramWeight,
+                                    usdaId: filteredDecodedFood.fdcID,
+                                    udsaSource: "Survey"))
+                            }
+                        } else {
+                            persistableFoods.append(StoredFood(
+                                name: filteredDecodedFood.description,
+                                calories: Int(
+                                    (filteredDecodedFood.foodNutrients.first(where: { $0.nutrient.unitName == "kcal" }))!.amount),
+                                portionName: nil,
+                                portionWeight: nil,
+                                usdaId: filteredDecodedFood.fdcID,
+                                udsaSource: "Survey"))
+                        }
                     }
                     for food in persistableFoods {
                         context.insert(food)

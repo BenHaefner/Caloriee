@@ -1,14 +1,20 @@
 {
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.26667,0.27843,0.35294,1.00000",
-      "display-p3:0.38431,0.44706,0.64314,1.00000"
+      "srgb:0.16471,0.61569,0.68627,1.00000",
+      "display-p3:0.44670,0.58935,0.66746,1.00000"
     ]
   },
   "groups" : [
     {
       "layers" : [
         {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "lighten"
+            }
+          ],
           "fill-specializations" : [
             {
               "value" : {
@@ -22,8 +28,26 @@
               }
             }
           ],
+          "glass" : true,
+          "hidden" : false,
           "image-name" : "Caloriee.png",
-          "name" : "Caloriee"
+          "name" : "Caloriee",
+          "opacity-specializations" : [
+            {
+              "value" : 1
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0.9
+            }
+          ],
+          "position" : {
+            "scale" : 0.75,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
         }
       ],
       "shadow" : {

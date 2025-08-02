@@ -71,7 +71,19 @@ struct SelectableFoodView: View {
             } else {
                 NavigationStack {
                     List(foodSearchResults, id: \.self, selection: $selected) { result in
-                        Text(result.name)
+                        HStack {
+                            VStack (alignment: .leading) {
+                                Text(result.name)
+                                if (result.portionName != nil) {
+                                    Text(result.portionName!)
+                                        .foregroundColor(.secondary)
+                                        .lineLimit(1)
+                                        .font(.caption)
+                                }
+                            }
+                            Spacer()
+                            Text("\(result.calories) cal")
+                        }
                     }
                 }
                 .cornerRadius(20)

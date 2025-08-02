@@ -19,7 +19,7 @@ struct FoodDetailView: View {
     var predismiss: () -> Void
 
     init(foodItem: FoodItem, creating: Bool, day: Day, predismiss: @escaping () -> Void) {
-        editableFoodItem = EditableFoodItem(foodItem: foodItem)  // TODO: Getting Fatal error index out of range on delete here.
+        editableFoodItem = EditableFoodItem(foodItem: foodItem)
         // Need to redo navigation so we can fix that error
         self.foodItem = foodItem
         self.creating = creating
