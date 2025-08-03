@@ -17,9 +17,11 @@ struct ContentView: View {
     @State var goal: Int?
     @State var settingGoal: Bool = false
     @State var stackPath: [FoodDetailNavigation] = []
+    @State var progressViewTrigger: UUID = UUID()
+
     var body: some View {
         NavigationStack(path: $stackPath) {
-            VStack {
+            ZStack {
                 if user != nil && day != nil && foodItems != nil {
                     DayView(
                         user: user!,
@@ -38,13 +40,16 @@ struct ContentView: View {
                         onSet: { newGoal in
                             self.goal = newGoal
                             self.settingGoal = false
+                            progressViewTrigger = UUID()
                         })
-                } else if (user == nil) {
-                    HeartSymbolProgressView(message: "Checking for profile...", taskToRun: initGoal)
-                        .onAppear {print("Profile appear")}
                 } else {
-                    HeartSymbolProgressView(message: "Doing some set up...", taskToRun: initializeData)
-                        .onAppear {print("Setup appear")}
+
+                    ProgressView(self.goal == nil ? "Checking for profile..." : "Doing some set up...")
+                        .id(progressViewTrigger)
+                        .opacity(settingGoal ? 0 : 1)
+                        .task {
+                            await initializeData()
+                        }
                 }
             }
             .navigationDestination(
@@ -62,6 +67,20 @@ struct ContentView: View {
 
     private func initializeData() async {
         do {
+            let profiles = try context.fetch(FetchDescriptor<Profile>())
+            let profile = profiles.first
+            if profile != nil {
+                self.user = profile!
+            } else {
+                if goal == nil {
+                    settingGoal = true
+                    return
+                }
+                self.user = Profile(calorieGoal: goal!)
+                context.insert(self.user!)
+                try context.save()
+            }
+
             let today = Calendar.current.startOfDay(for: Date())
             await reinitDate(for: today)
 
@@ -152,26 +171,6 @@ struct ContentView: View {
             }
         } catch {
             fatalError("Error retrieving initial data: \(error)")
-        }
-    }
-
-    private func initGoal() async {
-        do {
-            let profiles = try context.fetch(FetchDescriptor<Profile>())
-            let profile = profiles.first
-            if profile != nil {
-                self.user = profile!
-            } else {
-                if goal == nil {
-                    settingGoal = true
-                    return
-                }
-                self.user = Profile(calorieGoal: goal!)
-                context.insert(self.user!)
-                try context.save()
-            }
-        } catch {
-            fatalError("Error retrieving goal data: \(error)")
         }
     }
 

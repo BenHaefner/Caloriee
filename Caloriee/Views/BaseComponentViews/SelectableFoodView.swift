@@ -51,6 +51,9 @@ struct SelectableFoodView: View {
                 }
                 .buttonStyle(.bordered)
                 Spacer()
+                Text("Data provided by the USDA")
+                    .font(.caption)
+                Spacer()
                 Button {
                     if selected != nil {
                         onSelected(selected!)

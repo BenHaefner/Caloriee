@@ -65,8 +65,7 @@ struct GeneratePopoverView: View {
             } else {
                 VStack(alignment: .center) {
                     Spacer()
-                    Text("Estimating...")
-                    ProgressView()
+                    ProgressView("Estimating...")
                         .progressViewStyle(.circular)
                         .task {
                             await generateFoodItem()
