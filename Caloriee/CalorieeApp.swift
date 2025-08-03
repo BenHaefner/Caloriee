@@ -15,7 +15,7 @@ struct CalorieeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }.modelContainer(sharedCalorieeContainer)
+        }//.modelContainer(sharedCalorieeContainer)
     }
 
     static private func calorieeContainer() -> ModelContainer {

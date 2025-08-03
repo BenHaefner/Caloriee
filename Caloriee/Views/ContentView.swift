@@ -39,14 +39,12 @@ struct ContentView: View {
                             self.goal = newGoal
                             self.settingGoal = false
                         })
+                } else if (user == nil) {
+                    HeartSymbolProgressView(message: "Checking for profile...", taskToRun: initGoal)
+                        .onAppear {print("Profile appear")}
                 } else {
-                    VStack {
-                        Text("Doing some set up...")
-                        ProgressView()
-                            .task {
-                                await initializeData()
-                            }
-                    }
+                    HeartSymbolProgressView(message: "Doing some set up...", taskToRun: initializeData)
+                        .onAppear {print("Setup appear")}
                 }
             }
             .navigationDestination(
@@ -64,20 +62,6 @@ struct ContentView: View {
 
     private func initializeData() async {
         do {
-            let profiles = try context.fetch(FetchDescriptor<Profile>())
-            let profile = profiles.first
-            if profile != nil {
-                self.user = profile!
-            } else {
-                if goal == nil {
-                    settingGoal = true
-                    return
-                }
-                self.user = Profile(calorieGoal: goal!)
-                context.insert(self.user!)
-                try context.save()
-            }
-
             let today = Calendar.current.startOfDay(for: Date())
             await reinitDate(for: today)
 
@@ -168,6 +152,26 @@ struct ContentView: View {
             }
         } catch {
             fatalError("Error retrieving initial data: \(error)")
+        }
+    }
+
+    private func initGoal() async {
+        do {
+            let profiles = try context.fetch(FetchDescriptor<Profile>())
+            let profile = profiles.first
+            if profile != nil {
+                self.user = profile!
+            } else {
+                if goal == nil {
+                    settingGoal = true
+                    return
+                }
+                self.user = Profile(calorieGoal: goal!)
+                context.insert(self.user!)
+                try context.save()
+            }
+        } catch {
+            fatalError("Error retrieving goal data: \(error)")
         }
     }
 
