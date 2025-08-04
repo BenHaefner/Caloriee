@@ -13,7 +13,6 @@ struct ProgressArcView: View {
         min(CGFloat(caloriesConsumed) / CGFloat(calorieGoal), 1)
     }
 
-    // TODO: Make dynamic for screen size
     var body: some View {
         let start = 210.0
         let end = 330.0

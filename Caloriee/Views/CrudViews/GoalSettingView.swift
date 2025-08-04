@@ -8,6 +8,7 @@ import SwiftUI
 
 struct GoalSettingView: View {
     @State var goal: Int?
+    @State var showBanner: Bool = false
     let isEdit: Bool
     var onSet: (Int) -> Void
     
@@ -26,9 +27,11 @@ struct GoalSettingView: View {
             HStack {
                 TextField("Calorie Goal", value: $goal, formatter: NumberFormatter())
                     .font(.system(size: 34))
-                    .keyboardType(.numberPad)  // TODO: Should i add a text mask?
+                    .keyboardType(.numberPad)
                 Button {
-                    onSet(goal!)
+                    if (goal != nil) {
+                        onSet(goal!)
+                    }
                 } label: {
                     Image(systemName: "checkmark")
                 }
@@ -41,7 +44,6 @@ struct GoalSettingView: View {
                     .stroke(Color.blue, lineWidth: 2)
             )
             Spacer()
-            
         }
         .padding()
     }

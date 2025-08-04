@@ -39,7 +39,7 @@ struct FoodDetailView: View {
                 TextField(
                     "Calorie Count", value: $editableFoodItem.calorieCost, formatter: NumberFormatter()
                 )
-                .keyboardType(.numberPad)  // TODO: Should i add a text mask?
+                .keyboardType(.numberPad)
             }
             if editing {
                 Picker("Meal", selection: $editableFoodItem.mealType) {
