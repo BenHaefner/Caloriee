@@ -22,13 +22,17 @@ struct BannerView: ViewModifier {
 
     func body(content: Content) -> some View {
         ZStack {
+            content
             if (isPresented) {
                 VStack {
+                    Spacer()
                     HStack {
                         VStack (alignment: .leading) {
                             Text(viewModel.bannerData.title)
-                                .font(.title3)
+                                .font(.subheadline)
+                                .bold()
                             Text(viewModel.bannerData.message)
+                                .font(.caption)
                         }
                         Spacer()
                         Button {
@@ -43,7 +47,7 @@ struct BannerView: ViewModifier {
                         .regular.tint(viewModel.bannerData.color.opacity(0.2))
                     )
                     .animation(.easeInOut(duration: 1), value: true)
-                    .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
+                    .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
                     .onAppear {
                         // TODO: Move to view model?
                         self.task = DispatchWorkItem {
@@ -56,10 +60,9 @@ struct BannerView: ViewModifier {
                     .onDisappear {
                         self.task?.cancel()
                     }
-                    Spacer()
                 }
+                .padding()
             }
-            content
         }
     }
 }

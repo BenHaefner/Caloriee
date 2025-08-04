@@ -31,6 +31,8 @@ struct GoalSettingView: View {
                 Button {
                     if (goal != nil) {
                         onSet(goal!)
+                    } else {
+                        showBanner = true
                     }
                 } label: {
                     Image(systemName: "checkmark")
@@ -44,7 +46,13 @@ struct GoalSettingView: View {
                     .stroke(Color.blue, lineWidth: 2)
             )
             Spacer()
+            
         }
-        .padding()
+        .modifier(BannerView(
+            isPresented: $showBanner,
+            title: "Invalid goal",
+            message: "A valid goal must be a whole number",
+            color: Color.red
+        ))
     }
 }

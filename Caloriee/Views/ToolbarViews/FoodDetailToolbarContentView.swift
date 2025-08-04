@@ -14,6 +14,7 @@ struct FoodDetailToolbarContentView: View {
     @Binding var foodItem: FoodItem
     @Binding var editableFoodItem: EditableFoodItem
     @Binding var editing: Bool
+    @Binding var showError: Bool
     @State var generating: Bool = false
     @State var selecting: Bool = false
     var creating: Bool
@@ -52,14 +53,20 @@ struct FoodDetailToolbarContentView: View {
 
         Button {
             if editing {
-                editableFoodItem.copy(to: foodItem)
-                if creating {
-                    context.insert(foodItem)
-                }
-                Task {
-                    try context.save()
-                    predismiss()
-                    dismiss()
+                if (editableFoodItem.name != "") {
+                    editableFoodItem.copy(to: foodItem)
+                    if creating {
+                        context.insert(foodItem)
+                    }
+                    Task {
+                        try context.save()
+                        predismiss()
+                        dismiss()
+                    }
+                } else {
+                    print(showError)
+                    showError = true
+                    return
                 }
             }
             if !creating {

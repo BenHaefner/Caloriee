@@ -13,6 +13,7 @@ struct FoodDetailView: View {
     @Environment(\.dismiss) var dismiss
     @State var foodItem: FoodItem
     @State var editing: Bool
+    @State var showError: Bool = false
     @State var editableFoodItem: EditableFoodItem
     @Bindable var day: Day
     let creating: Bool
@@ -69,12 +70,21 @@ struct FoodDetailView: View {
                 }
             }
         }
+        .modifier(
+            BannerView(
+                isPresented: $showError,
+                title: "Invalid Name",
+                message: "Name is a required field. Please make sure it is not empty.",
+                color: .red
+            )
+        )
         .toolbar(content: {
             ToolbarItemGroup(placement: .primaryAction) {
                 FoodDetailToolbarContentView(
                     foodItem: $foodItem,
                     editableFoodItem: $editableFoodItem,
                     editing: $editing,
+                    showError: $showError,
                     creating: creating,
                     predismiss: predismiss
                 )
