@@ -43,11 +43,12 @@ struct GoalSettingView: View {
             .padding()
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.blue, lineWidth: 2)
+                    .stroke(.accent, lineWidth: 2)
             )
             Spacer()
             
         }
+        .padding()
         .modifier(BannerView(
             isPresented: $showBanner,
             title: "Invalid goal",

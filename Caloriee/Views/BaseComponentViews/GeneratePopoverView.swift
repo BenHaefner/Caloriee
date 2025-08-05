@@ -45,7 +45,7 @@ struct GeneratePopoverView: View {
                     .scrollContentBackground(.hidden)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.blue, lineWidth: 2)
+                            .stroke(.accent, lineWidth: 2)
                     )
 
                     Button {
