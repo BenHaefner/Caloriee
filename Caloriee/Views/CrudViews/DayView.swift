@@ -19,39 +19,41 @@ struct DayView: View {
     var getFoodItemDataForDay: () async -> Void
 
     var body: some View {
-        List {
-            Section(
-                content: {
-                    VStack(alignment: .leading) {
-                        ProgressArcView(caloriesConsumed: getCaloriesConsumed(foodItems: self.foodItems), calorieGoal: user.calorieGoal)
-                            .frame(maxWidth: .infinity)
+        ZStack {
+            List {
+                Section(
+                    content: {
+                        VStack(alignment: .leading) {
+                            ProgressArcView(caloriesConsumed: getCaloriesConsumed(foodItems: self.foodItems), calorieGoal: user.calorieGoal)
+                                .frame(maxWidth: .infinity)
+                        }
+                    },
+                    header: {
+                        Text(day.date.formatted(date: .abbreviated, time: .omitted))
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+                    })
+                FoodIterationView(day: day, foodItems: $foodItems, onFoodItemDelete: { deletedFood in
+                    Task {
+                        await removeFoodItem(deletableFood: deletedFood)
+                        await getFoodItemDataForDay()
                     }
-                },
-                header: {
-                    Text(day.date.formatted(date: .abbreviated, time: .omitted))
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
                 })
-            FoodIterationView(day: day, foodItems: $foodItems, onFoodItemDelete: { deletedFood in
-                Task {
-                    await removeFoodItem(deletableFood: deletedFood)
-                    await getFoodItemDataForDay()
-                }
-            })
-        }
-        .toolbar {
-            ToolbarItemGroup(
-                placement: .bottomBar,
-                content: {
-                    DayToolbarContentView(
-                        user: user,
-                        day: day,
-                        stackPath: $stackPath,
-                        onChangeDate: { changedDate in
-                            onChangeDate(changedDate)
-                        })
-                })
+            }
+            .toolbar {
+                ToolbarItemGroup(
+                    placement: .bottomBar,
+                    content: {
+                        DayToolbarContentView(
+                            user: user,
+                            day: day,
+                            stackPath: $stackPath,
+                            onChangeDate: { changedDate in
+                                onChangeDate(changedDate)
+                            })
+                    })
+            }
         }
     }
 

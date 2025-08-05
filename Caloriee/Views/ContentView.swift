@@ -22,6 +22,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $stackPath) {
             ZStack {
+                Theme.background.ignoresSafeArea()
                 if user != nil && day != nil && foodItems != nil {
                     DayView(
                         user: user!,
