@@ -49,7 +49,6 @@ struct BannerView: ViewModifier {
                     .animation(.easeInOut(duration: 1), value: true)
                     .transition(AnyTransition.move(edge: .bottom).combined(with: .opacity))
                     .onAppear {
-                        // TODO: Move to view model?
                         self.task = DispatchWorkItem {
                             withAnimation {
                                 isPresented = false
