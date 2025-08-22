@@ -35,7 +35,9 @@ struct GoalSettingView: View {
                         showBanner = true
                     }
                 } label: {
-                    Image(systemName: "checkmark")
+                    Label("Set Goal", systemImage: "checkmark")
+                        .labelStyle(.iconOnly)
+
                 }
                 .buttonStyle(.glassProminent)
                 .disabled(goal == nil)

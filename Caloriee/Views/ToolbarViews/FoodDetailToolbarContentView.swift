@@ -26,7 +26,8 @@ struct FoodDetailToolbarContentView: View {
             Button {
                 if !selecting { generating = true }
             } label: {
-                Image(systemName: "sparkles")
+                Label("Generate Food", systemImage: "sparkles")
+                    .labelStyle(.iconOnly)
             }
             .popover(isPresented: $generating) {
                 GeneratePopoverView(onGenerated: { generatedFoodItem in
@@ -39,7 +40,8 @@ struct FoodDetailToolbarContentView: View {
             Button {
                 if !generating { selecting = true }
             } label: {
-                Image(systemName: "list.bullet")
+                Label("Select Food", systemImage: "list.bullet")
+                    .labelStyle(.iconOnly)
             }
             .popover(isPresented: $selecting) {
                 SelectableFoodView(onSelected: { selectedStoredFood in
@@ -73,7 +75,9 @@ struct FoodDetailToolbarContentView: View {
                 editing.toggle()
             }
         } label: {
-            Image(systemName: editing ? "checkmark" : "square.and.pencil")
+            Label(editing ? "Save" : "Edit", systemImage: editing ? "checkmark" : "square.and.pencil")
+                .labelStyle(.iconOnly)
+
         }
         .buttonStyle(.glassProminent)
     }

@@ -22,7 +22,8 @@ struct GeneratePopoverView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: "multiply")
+                    Label("Close", systemImage: "multiply")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.bordered)
                 Spacer()
@@ -52,12 +53,10 @@ struct GeneratePopoverView: View {
                         generatingFood = true
 
                     } label: {
-                        HStack {
-                            Image(systemName: "sparkles")
-                            Text("Generate")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
+                        Label("Generate", systemImage: "sparkles")
+                            .labelStyle(.titleAndIcon)
+                            .frame(maxWidth: .infinity)
+                            .padding()
                     }
                     .buttonStyle(.glassProminent)
 

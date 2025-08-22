@@ -47,7 +47,8 @@ struct SelectableFoodView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: "multiply")
+                    Label("Close", systemImage: "multiply")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.bordered)
                 Spacer()
@@ -62,7 +63,8 @@ struct SelectableFoodView: View {
                         dismiss()
                     }
                 } label: {
-                    Image(systemName: "checkmark")
+                    Label("Select Food", systemImage: "checkmark")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.glassProminent)
                 

@@ -23,25 +23,29 @@ struct DayToolbarContentView: View {
             let newDate = Calendar.current.date(byAdding: .day, value: -1, to: day.date)
             onChangeDate(newDate!)
         } label: {
-            Image(systemName: "chevron.backward")
+            Label("Previous Date", systemImage: "chevron.backward")
+                .labelStyle(.iconOnly)
         }
         Button {
             let newDate = Calendar.current.date(byAdding: .day, value: 1, to: day.date)
             onChangeDate(newDate!)
         } label: {
-            Image(systemName: "chevron.forward")
+            Label("Next Date", systemImage: "chevron.forward")
+                .labelStyle(.iconOnly)
         }
         Button {
             newFoodItem = FoodItem(dayId: day.id)
             stackPath.append(FoodDetailNavigation(foodItem: newFoodItem!, creating: true, day: day))
         } label: {
-            Image(systemName: "plus.square")
+            Label("Add Food", systemImage: "plus.square")
+                .labelStyle(.iconOnly)
         }
 
         Button {
             selectingDate = true
         } label: {
-            Image(systemName: "calendar")
+            Label("Select Date By Calendar", systemImage: "calendar")
+                .labelStyle(.iconOnly)
         }
         .popover(isPresented: $selectingDate) {
             VStack {
@@ -49,7 +53,8 @@ struct DayToolbarContentView: View {
                     Button {
                         selectingDate = false
                     } label: {
-                        Image(systemName: "multiply")
+                        Label("Close", systemImage: "multiply")
+                            .labelStyle(.iconOnly)
                     }
                     .buttonStyle(.bordered)
                     Spacer()
@@ -57,7 +62,8 @@ struct DayToolbarContentView: View {
                         selectingDate = false
                         onChangeDate(newAnyDate)
                     } label: {
-                        Image(systemName: "checkmark")
+                        Label("Done", systemImage: "checkmark")
+                            .labelStyle(.iconOnly)
                     }
                     .buttonStyle(.glassProminent)
                 }
@@ -70,7 +76,8 @@ struct DayToolbarContentView: View {
         Button {
             editingGoal = true
         } label: {
-            Image(systemName: "sparkle.text.clipboard")
+            Label("Set Goal", systemImage: "sparkle.text.clipboard")
+                .labelStyle(.iconOnly)
         }
         .sheet(isPresented: $editingGoal) {
             GoalSettingView(

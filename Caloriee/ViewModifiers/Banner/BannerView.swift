@@ -38,7 +38,8 @@ struct BannerView: ViewModifier {
                         Button {
                             isPresented = false
                         } label: {
-                            Image(systemName: "xmark")
+                            Label("Close", systemImage: "xmark")
+                                .labelStyle(.iconOnly)
                         }
                         .buttonStyle(.bordered)
                     }
